@@ -49,7 +49,7 @@ public/img/                  AVIF + WebP + JPG/PNG en varios anchos
 
 ## Resultados de verificación (19-10-2026)
 
-- Lighthouse móvil (simulado, 3 pasadas, servidor con compresión): Rendimiento 100 · Accesibilidad 100 · Buenas prácticas 100 · SEO 100 · LCP 1,7 s · CLS 0 · TBT 0–60 ms. Informes en `.claude/qa/lighthouse/` (`summary.json` + HTML).
+- Lighthouse móvil (simulado, 3 pasadas, servidor con compresión): Rendimiento 99–100 · Accesibilidad 100 · Buenas prácticas 100 · SEO 100 · LCP 1,6–1,7 s · CLS 0 · TBT 60–130 ms. Informes en `.claude/qa/lighthouse/` (`summary.json` + HTML).
 - Capturas a 375, 768 y 1440 px, con y sin reduced-motion: `.claude/qa/shots/`. Consola sin errores, sin 404, sin scroll horizontal accidental.
 - Escudo vectorial frente al original: 0 % de diferencia en el interior de las formas (`.claude/qa/escudo-diff.png`).
 - JS: 1 KB en la carga; el paquete de movimiento (57 KB gzip) se pide con la primera interacción.
@@ -57,9 +57,9 @@ public/img/                  AVIF + WebP + JPG/PNG en varios anchos
 ## Decisiones de diseño (una línea cada una)
 
 - **La página se lee como el escudo**: banda azul (hero), línea negra, franjas rojas (Familia), marino de las sudaderas (Historia, Contacto). Fondos solo en colores del equipo, a petición del cliente.
-- **Escudo estático en un recuadro** con sombra fija y el círculo central de la pista detrás (el cliente descartó el escudo flotante que seguía al cursor).
-- **Cabecera de club a todo el ancho** (escritorio) con el escudo sobresaliendo por encima de las 7 franjas; inspirada en webs de clubes profesionales, sin copiar ninguna. En móvil, dock inferior con botones.
-- **Solo movimiento vertical**: Historia es una pila de páginas que suben y se apilan; Valores encaja las palabras cayendo/subiendo (el cliente pidió nada horizontal).
+- **Escudo del hero**: en escritorio, estático en un recuadro con sombra; en móvil y tableta, grande y oscurecido como fondo, con el nombre encima (el cliente descartó el escudo flotante y el recuadro en móvil).
+- **Cabecera de club a todo el ancho** en todos los tamaños, con el escudo sobresaliendo por encima de las 7 franjas; inspirada en webs de clubes profesionales, sin copiar ninguna. En móvil y tableta, botón de menú que abre un panel a pantalla completa.
+- **Solo movimiento vertical**: Historia es una pila de páginas que suben y se apilan; en escritorio, Valores encaja las palabras cayendo/subiendo (en móvil se muestra montado, sin animación).
 - **Todo cabe en pantalla con margen**: Valores centrado y limitado por el alto de la ventana; la ilustración de Familia se dimensiona para verse entera sin scroll.
 - **Patrocinadores**: banda blanca a todo el ancho sobre el azul, logos en fila sin recuadros, mismo peso visual por altura óptica.
 - **Anybody con eje de anchura**: «PRAGA» se ensancha una vez al cargar; en Valores las tres palabras se igualan al mismo ancho al encajar.

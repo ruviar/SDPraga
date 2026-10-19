@@ -12,6 +12,7 @@ const setOpen = (open: boolean, restoreFocus = true) => {
   if (!sheet || !toggle) return;
   sheet.hidden = !open;
   toggle.setAttribute('aria-expanded', String(open));
+  document.documentElement.style.overflow = open ? 'hidden' : '';
   if (label) label.textContent = (open ? label.dataset.open : label.dataset.closed) ?? '';
   if (open) sheet.querySelector<HTMLElement>('a')?.focus();
   else if (restoreFocus) toggle.focus();

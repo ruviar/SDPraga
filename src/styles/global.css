@@ -261,6 +261,7 @@ p { text-wrap: pretty; max-width: 62ch; }
 
 /* ---------- Secciones ---------- */
 .section { position: relative; z-index: var(--z-content); }
+main > section[id] { scroll-margin-top: 65px; }
 @media (min-width: 1024px) { main > section[id] { scroll-margin-top: 73px; } }
 /* Secciones bajo el pliegue: el navegador no las maqueta hasta acercarse (carga más ligera).
    `auto` recuerda el tamaño real una vez pintadas. Al usar el menú se desactiva (.cv-off). */

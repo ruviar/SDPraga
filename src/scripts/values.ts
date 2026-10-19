@@ -35,7 +35,8 @@ export function initValues({ gsap }: Ctx) {
   };
 
   const mm = gsap.matchMedia();
-  mm.add('(prefers-reduced-motion: no-preference)', (self) => {
+  // Solo escritorio: en móvil la ecuación se muestra montada, sin animación.
+  mm.add('(prefers-reduced-motion: no-preference) and (min-width: 1024px)', (self) => {
     section.dataset.mode = 'scrub';
     // La línea de tiempo (y las mediciones del ajuste de ancho) se crean al acercarse
     // a la sección: así no pesan en la carga inicial.

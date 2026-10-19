@@ -119,7 +119,6 @@ export const content = {
     skip: 'Saltar al contenido', // [nav]
     menu: 'Menú', // [nav]
     close: 'Cerrar', // [nav]
-    home: 'Inicio', // [nav]
     tilt: 'Inclinar el escudo con el móvil', // [nav]
   },
 } as const;

@@ -30,7 +30,7 @@ Todo el texto vive en `src/content.ts` y `src/site.config.ts` (cada cadena lleva
 
 ## Interfaz (sin afirmaciones)
 
-«Historia», «Valores», «Familia», «Patrocinadores», «Contacto», «Nuestra historia», «Nuestros valores», «Conoce nuestra historia», «Ver nuestros valores», «Saltar al contenido», «Menú», «Cerrar», «Inicio», números de capítulo 01–04, operadores «+ =».
+«Historia», «Valores», «Familia», «Patrocinadores», «Contacto», «Nuestra historia», «Nuestros valores», «Conoce nuestra historia», «Ver nuestros valores», «Saltar al contenido», «Menú», «Cerrar», números de capítulo 01–04, operadores «+ =».
 Solo aparecen si se rellenan en `site.config.ts`: «Llamar», «Escribir», «WhatsApp», «Instagram».
 
 ## Textos alternativos

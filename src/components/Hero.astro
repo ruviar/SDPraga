@@ -6,6 +6,11 @@ import Button from './Button.astro';
 ---
 
 <section class="hero mesh" id="inicio" aria-labelledby="hero-title" data-hero>
+  <!-- Móvil y tableta: el escudo como fondo, oscurecido, con el nombre encima -->
+  <div class="hero__bg" aria-hidden="true">
+    <img src="/escudo.svg" width="434" height="549" alt="" fetchpriority="high" decoding="sync" draggable="false" />
+  </div>
+
   <div class="hero__crest">
     <Crest />
   </div>
@@ -33,8 +38,9 @@ import Button from './Button.astro';
     min-height: 100svh;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) auto;
-    padding: max(1rem, env(safe-area-inset-top)) var(--gutter) calc(6.5rem + env(safe-area-inset-bottom));
+    grid-template-rows: 1fr;
+    align-items: end;
+    padding: calc(65px + 1rem) var(--gutter) calc(clamp(2rem, 6svh, 3.5rem) + env(safe-area-inset-bottom));
     overflow: clip;
     isolation: isolate;
     color: var(--claro);
@@ -45,18 +51,45 @@ import Button from './Button.astro';
   }
 
 
-  .hero__crest {
-    grid-area: 1 / 1;
-    align-self: center;
-    width: 100%;
-    max-width: 26rem;
-    margin-top: 0.25rem;
+  /* ---------- Móvil / tableta: escudo de fondo con velo oscuro ---------- */
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    place-items: center;
+    padding-top: 65px;
+    overflow: clip;
+    pointer-events: none;
   }
-  /* Móvil: recuadro apaisado para que nombre y botones quepan en la primera pantalla */
-  .hero__crest :global(.crest) { aspect-ratio: 16 / 10; padding: 7% 10% 9%; }
+  /* Escudo grande, centrado detrás del nombre y apagado: marca de agua, no un segundo título */
+  .hero__bg img {
+    width: min(118vw, 84svh * 0.79, 44rem);
+    height: auto;
+    margin-top: -6svh;
+    filter: brightness(0.62) saturate(0.85) drop-shadow(0 40px 60px rgb(0 0 0 / 0.5));
+    user-select: none;
+  }
+  /* Velo: deja ver el escudo arriba y oscurece hacia el texto para que se lea encima */
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(90% 60% at 50% 38%, rgb(8 18 43 / 0.15) 0%, rgb(8 18 43 / 0.55) 75%),
+      linear-gradient(
+        to bottom,
+        rgb(8 18 43 / 0.35) 0%,
+        rgb(8 18 43 / 0.45) 40%,
+        rgb(8 18 43 / 0.72) 62%,
+        rgb(8 18 43 / 0.9) 82%,
+        var(--marino) 100%
+      );
+  }
+  .hero__crest { display: none; }
 
   .hero__copy {
-    grid-area: 2 / 1;
+    grid-area: 1 / 1;
     position: relative;
     z-index: 2;
   }
@@ -119,11 +152,8 @@ import Button from './Button.astro';
     gap: 0.9rem 0.8rem;
   }
 
-  @media (min-width: 640px) {
-    .hero__crest { max-width: 30rem; }
-  }
 
-  /* Escritorio: composición asimétrica; el escudo rompe la rejilla por la derecha */
+  /* Escritorio: nombre abajo-izquierda y escudo estático en su recuadro a la derecha */
   @media (min-width: 1024px) {
     .hero {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -133,7 +163,9 @@ import Button from './Button.astro';
       column-gap: 4vw;
     }
     .hero__copy { grid-area: 1 / 1; align-self: end; }
+    .hero__bg { display: none; }
     .hero__crest {
+      display: block;
       grid-area: 1 / 2;
       align-self: end;
       justify-self: end;

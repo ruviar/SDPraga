@@ -1,9 +1,9 @@
 ---
-// Escritorio: barra de club a todo el ancho (escudo que sobresale por encima de las
-// franjas del escudo que la rematan).
-// Móvil: dock inferior con escudo y botón Menú que abre un panel con botones físicos.
+// Barra de club fija arriba en todos los tamaños: escudo que sobresale por encima de las
+// franjas del escudo que la rematan.
+// Escritorio: enlaces en la barra. Móvil/tableta: botón de menú que abre un panel a
+// pantalla completa bajo la barra (lógica en src/scripts/boot.ts, funciona sin esperar a GSAP).
 import { content } from '../content';
-import Button from './Button.astro';
 ---
 
 <header class="nav" data-nav>
@@ -17,46 +17,46 @@ import Button from './Button.astro';
         <li><a href={l.href} data-nav-link>{l.label}</a></li>
       ))}
     </ul>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-sheet" data-menu-toggle>
+      <span class="nav__burger" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="visually-hidden" data-menu-label data-open={content.ui.close} data-closed={content.ui.menu}>{content.ui.menu}</span>
+    </button>
     <span class="nav__bands" aria-hidden="true">{Array.from({ length: 7 }, () => <span />)}</span>
   </nav>
 
-  <div class="dock">
-    <a class="dock__home" href="#inicio" aria-label={content.ui.home}>
-      <img src="/escudo.svg" width="26" height="33" alt="" />
-    </a>
-    <Button variant="marino" class="dock__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-toggle>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>
-      <span data-menu-label data-open={content.ui.close} data-closed={content.ui.menu}>{content.ui.menu}</span>
-    </Button>
-  </div>
-
   <div class="sheet" id="nav-sheet" data-sheet hidden>
-    <nav aria-label="Secciones">
+    <nav class="sheet__nav" aria-label="Secciones">
       <ul class="sheet__list">
         {content.nav.map((l, i) => (
           <li style={`--i:${i}`}>
-            <Button href={l.href} variant={i === content.nav.length - 1 ? 'rojo' : 'crema'} class="sheet__btn" data-sheet-link>{l.label}</Button>
+            <a class="sheet__link" href={l.href} data-nav-link>{l.label}</a>
           </li>
         ))}
       </ul>
     </nav>
+    <p class="sheet__motto">
+      <img src="/escudo.svg" width="36" height="46" alt="" />
+      <span>{content.motto}</span>
+    </p>
+    <span class="sheet__bands" aria-hidden="true">{Array.from({ length: 7 }, () => <span />)}</span>
   </div>
 </header>
-
 
 <style>
   .nav { position: relative; z-index: var(--z-nav); }
 
-  /* ---------- Barra de club (escritorio) ---------- */
+  /* ---------- Barra de club ---------- */
   .nav__bar {
+    --bar-h: 60px;
+    --crest-w: 50px;
     position: fixed;
     inset: 0 0 auto;
-    height: 68px;
-    display: none;
+    height: var(--bar-h);
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
-    padding: 0 var(--gutter) 0 calc(var(--gutter) + 92px);
+    gap: 1rem;
+    padding: 0 calc(var(--gutter) - 6px) 0 calc(var(--gutter) + var(--crest-w) + 14px);
     background: color-mix(in oklch, var(--marino), var(--azul-escudo) 12%);
     color: var(--claro);
     box-shadow: 0 10px 30px -18px rgb(0 0 0 / 0.7);
@@ -64,14 +64,15 @@ import Button from './Button.astro';
   .nav__brand {
     display: flex;
     align-items: center;
+    min-height: 44px;
     text-decoration: none;
   }
   /* El escudo sobresale de la barra, con sombra fija */
   .nav__crest {
     position: absolute;
     left: var(--gutter);
-    top: 8px;
-    width: 72px;
+    top: 6px;
+    width: var(--crest-w);
     z-index: 2;
   }
   .nav__crest img { width: 100%; height: auto; filter: drop-shadow(0 8px 10px rgb(0 0 0 / 0.45)); }
@@ -79,11 +80,11 @@ import Button from './Button.astro';
     font-family: var(--font-display);
     font-weight: 900;
     font-stretch: 112%;
-    font-size: 1.15rem;
+    font-size: 1rem;
     letter-spacing: 0.01em;
     text-transform: uppercase;
   }
-  .nav__links { display: flex; list-style: none; padding: 0; gap: 0.25rem; height: 100%; }
+  .nav__links { display: none; list-style: none; padding: 0; gap: 0.25rem; height: 100%; }
   .nav__links li { display: flex; }
   .nav__links a {
     position: relative;
@@ -118,69 +119,108 @@ import Button from './Button.astro';
   .nav__links a[aria-current]::after { transform: none; }
   .nav__links a:focus-visible { outline-offset: -6px; box-shadow: none; }
   /* Franjas del escudo bajo la barra */
-  .nav__bands {
+  .nav__bands, .sheet__bands {
     position: absolute;
     left: 0;
     right: 0;
-    top: 100%;
-    height: 5px;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    z-index: 1;
   }
-  .nav__bands span { background: var(--rojo); }
-  .nav__bands span:nth-child(even) { background: var(--crema); }
+  .nav__bands { top: 100%; height: 5px; z-index: 1; }
+  .nav__bands span, .sheet__bands span { background: var(--rojo); }
+  .nav__bands span:nth-child(even), .sheet__bands span:nth-child(even) { background: var(--crema); }
 
-  /* ---------- Dock (móvil) ---------- */
-  .dock {
-    position: fixed;
-    left: 50%;
-    bottom: max(12px, env(safe-area-inset-bottom));
-    translate: -50% 0;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 6px 6px 6px 6px;
-    border-radius: 22px;
-    background: var(--marino);
-    box-shadow: 0 16px 34px -14px color-mix(in oklch, var(--marino), transparent 30%);
-    z-index: calc(var(--z-nav) + 1);
-  }
-  .dock__home {
+  /* ---------- Botón de menú (móvil / tableta) ---------- */
+  .nav__toggle {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: var(--crema);
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--claro);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
-  .dock__home img { width: 26px; height: auto; }
-  .dock :global(.dock__menu .btn__face) { padding: 0.8em 1.05em; background: color-mix(in oklch, var(--marino), var(--crema) 14%); }
-  .dock :global(.dock__menu .btn__face svg) { width: 1.25em; height: 1.25em; }
+  .nav__burger { position: relative; display: block; width: 24px; height: 16px; }
+  .nav__burger span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 220ms var(--ease-out), opacity 150ms;
+  }
+  .nav__burger span:nth-child(1) { top: 0; }
+  .nav__burger span:nth-child(2) { top: calc(50% - 1.25px); }
+  .nav__burger span:nth-child(3) { bottom: 0; width: 66%; }
+  .nav__toggle[aria-expanded='true'] .nav__burger span:nth-child(1) { transform: translateY(6.75px) rotate(45deg); }
+  .nav__toggle[aria-expanded='true'] .nav__burger span:nth-child(2) { opacity: 0; }
+  .nav__toggle[aria-expanded='true'] .nav__burger span:nth-child(3) { width: 100%; transform: translateY(-6.75px) rotate(-45deg); }
 
+  /* ---------- Panel de secciones ---------- */
   .sheet {
     position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 76px);
-    padding: 14px;
-    border-radius: 22px;
-    background: var(--marino);
-    box-shadow: 0 24px 60px -20px color-mix(in oklch, var(--marino), transparent 20%);
-    z-index: var(--z-nav);
-    transform-origin: 50% 100%;
+    inset: calc(60px + 5px) 0 0;
+    z-index: -1;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: clamp(1.5rem, 5svh, 2.5rem) var(--gutter) calc(2.5rem + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    background:
+      radial-gradient(80% 50% at 80% 0%, color-mix(in oklch, var(--azul-escudo), transparent 40%), transparent 70%),
+      var(--marino);
     animation: sheet-in 260ms var(--ease-out);
   }
   .sheet[hidden] { display: none; }
-  .sheet__list { list-style: none; padding: 0; display: grid; gap: 14px; }
-  .sheet__list li { animation: sheet-item 320ms var(--ease-out) both; animation-delay: calc(var(--i) * 30ms + 40ms); }
-  .sheet :global(.sheet__btn) { width: 100%; }
-  .sheet :global(.sheet__btn .btn__face) { justify-content: flex-start; font-family: var(--font-display); font-weight: 800; font-stretch: 112%; font-size: 1.2rem; }
-  @keyframes sheet-in { from { transform: translateY(14px) scale(0.98); opacity: 0; } }
-  @keyframes sheet-item { from { transform: translateY(10px); opacity: 0; } }
+  .sheet__list { list-style: none; padding: 0; }
+  .sheet__list li { animation: sheet-item 320ms var(--ease-out) both; animation-delay: calc(var(--i) * 35ms + 60ms); }
+  .sheet__link {
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid color-mix(in oklch, var(--crema), transparent 86%);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-stretch: 90%;
+    font-size: clamp(1.7rem, 7.5vw, 2.4rem);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--claro);
+  }
+  .sheet__link[aria-current] { color: var(--oro); }
+  .sheet__link:focus-visible { outline-offset: 2px; box-shadow: none; }
+  .sheet__motto {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--step-0);
+    color: var(--claro-2);
+  }
+  .sheet__motto img { width: 36px; height: auto; flex: none; }
+  .sheet__bands { bottom: 0; height: 8px; }
+  @keyframes sheet-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes sheet-item { from { transform: translateY(12px); opacity: 0; } }
 
+  @media (prefers-reduced-motion: reduce) {
+    .sheet, .sheet__list li { animation: none; }
+    .nav__burger span { transition: none; }
+  }
+
+  /* ---------- Escritorio ---------- */
   @media (min-width: 1024px) {
-    .nav__bar { display: flex; }
-    .dock, .sheet { display: none !important; }
+    .nav__bar { --bar-h: 68px; --crest-w: 72px; padding: 0 var(--gutter) 0 calc(var(--gutter) + 92px); gap: 2rem; }
+    .nav__crest { top: 8px; }
+    .nav__name { font-size: 1.15rem; }
+    .nav__links { display: flex; }
+    .nav__toggle, .sheet { display: none !important; }
   }
 </style>

@@ -17,11 +17,15 @@ export function initNav({ lenis }: Ctx) {
       if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
       target.focus({ preventScroll: true });
     };
-    // En escritorio la barra fija (68 px + franjas) tapa el borde superior
-    const offset = innerWidth >= 1024 && id !== 'inicio' ? -73 : 0;
-    if (lenis) lenis.scrollTo(target, { offset, duration: 1.2, onComplete: done });
-    else {
-      scrollTo({ top: target.getBoundingClientRect().top + scrollY + offset });
+    // Destino calculado con la posición real de la ventana (Lenis puede ir un fotograma por
+    // detrás tras un scroll por foco) menos el scroll-margin-top de la sección (la barra fija).
+    const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const y = Math.max(0, target.getBoundingClientRect().top + scrollY - margin);
+    if (lenis) {
+      if (Math.abs(lenis.animatedScroll - scrollY) > 1) lenis.scrollTo(scrollY, { immediate: true });
+      lenis.scrollTo(y, { duration: 1.2, onComplete: done });
+    } else {
+      scrollTo({ top: y });
       done();
     }
     history.replaceState(null, '', `#${id}`);
