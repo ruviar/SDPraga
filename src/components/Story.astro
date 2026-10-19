@@ -1,8 +1,8 @@
 ---
-// Historia: cuatro capítulos como páginas que se apilan en vertical.
-// ≥768 px: cada página se queda pegada (sticky) y la siguiente sube por encima; la anterior
-// se encoge y se oscurece un poco (src/scripts/story.ts). Móvil: páginas en columna que
-// entran con un barrido vertical. Sin ningún desplazamiento horizontal.
+// Historia: cuatro capítulos, cada uno en su propia banda a todo el ancho y con su color
+// (marino, azul del escudo, amarillo del pabellón, rojo). En ≥768 px se alternan:
+// texto a la izquierda / a la derecha. Entre el azul y el rojo, la línea negra del escudo.
+// Movimiento: solo revelados verticales al entrar (src/scripts/story.ts).
 import { content } from '../content';
 import { siteConfig } from '../site.config';
 import Picture from './Picture.astro';
@@ -11,12 +11,11 @@ import Court from './Court.astro';
 const [c1, c2, c3, c4] = content.story.chapters;
 ---
 
-<section class="story mesh" id="historia" aria-labelledby="story-title" data-story>
-  <h2 class="story__title" id="story-title" data-story-title>{content.story.title}</h2>
-
-  <div class="stack">
-    <article class="chapter chapter--1" style="--i:0" aria-labelledby="ch-1" data-chapter>
-      <div class="chapter__body">
+<section class="story" id="historia" aria-labelledby="story-title" data-story>
+  <article class="chapter chapter--1 mesh" aria-labelledby="ch-1" data-chapter>
+    <div class="chapter__inner">
+      <h2 class="story__title" id="story-title" data-story-title>{content.story.title}</h2>
+      <div class="chapter__text">
         <header class="chapter__head">
           <p class="chapter__num">{c1.number}</p>
           <h3 class="chapter__title" id="ch-1">{c1.title}</h3>
@@ -24,116 +23,99 @@ const [c1, c2, c3, c4] = content.story.chapters;
         <p class="chapter__lead" data-reveal>{c1.text}</p>
         <p class="chapter__punch" data-reveal>{c1.punch}</p>
       </div>
-      <span class="chapter__shade" aria-hidden="true"></span>
-    </article>
+    </div>
+  </article>
 
-    <article class="chapter chapter--2" style="--i:1" aria-labelledby="ch-2" data-chapter>
-      <div class="chapter__body">
-        <div class="chapter__text">
-          <header class="chapter__head">
-            <p class="chapter__num">{c2.number}</p>
-            <h3 class="chapter__title" id="ch-2">{c2.title}</h3>
-          </header>
-          <p class="chapter__lead" data-reveal>{c2.text}</p>
-        </div>
-        {
-          siteConfig.showFoundersPhoto && (
-            <div class="print" data-print>
-              <Picture name="mazo" alt={c2.photoAlt} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 80vw" imgClass="print__img" />
-            </div>
-          )
-        }
+  <article class="chapter chapter--2 chapter--right" aria-labelledby="ch-2" data-chapter>
+    <div class="chapter__inner">
+      <div class="chapter__text">
+        <header class="chapter__head">
+          <p class="chapter__num">{c2.number}</p>
+          <h3 class="chapter__title" id="ch-2">{c2.title}</h3>
+        </header>
+        <p class="chapter__lead" data-reveal>{c2.text}</p>
       </div>
-      <span class="chapter__shade" aria-hidden="true"></span>
-    </article>
+      {
+        siteConfig.showFoundersPhoto && (
+          <div class="chapter__media">
+            <figure class="print" data-print>
+              <Picture name="mazo" alt={c2.photoAlt} sizes="(min-width: 1024px) 30vw, (min-width: 768px) 40vw, 80vw" imgClass="print__img" />
+              <figcaption class="print__caption">{c2.caption}</figcaption>
+            </figure>
+          </div>
+        )
+      }
+    </div>
+  </article>
 
-    <article class="chapter chapter--3" style="--i:2" aria-labelledby="ch-3" data-chapter>
-      <div class="chapter__body">
+  <article class="chapter chapter--3 mesh" aria-labelledby="ch-3" data-chapter>
+    <div class="chapter__inner">
+      <div class="chapter__text">
         <header class="chapter__head">
           <p class="chapter__num">{c3.number}</p>
           <h3 class="chapter__title" id="ch-3">{c3.title}</h3>
         </header>
         <p class="chapter__lead chapter__lead--big" data-reveal>{c3.text}</p>
-        <a class="chapter__link" href={c3.link.href}>
+        <a class="chapter__link" href={c3.link.href} data-reveal>
           {c3.link.label}
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13m-6-5 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </a>
       </div>
-      <span class="chapter__shade" aria-hidden="true"></span>
-    </article>
+    </div>
+  </article>
 
-    <article class="chapter chapter--4" style="--i:3" aria-labelledby="ch-4" data-chapter>
-      <div class="chapter__body">
+  <article class="chapter chapter--4 chapter--right" aria-labelledby="ch-4" data-chapter>
+    <div class="chapter__inner">
+      <div class="chapter__text">
+        <header class="chapter__head">
+          <p class="chapter__num">{c4.number}</p>
+          <h3 class="chapter__title" id="ch-4">{c4.title}</h3>
+        </header>
+        <p class="chapter__lead" data-reveal>{c4.text}</p>
+      </div>
+      <div class="chapter__media">
         <div class="kickoff" aria-hidden="true" data-kickoff>
           <Court class="kickoff__court" />
           <span class="kickoff__ball"></span>
         </div>
-        <div class="chapter__text">
-          <header class="chapter__head">
-            <p class="chapter__num">{c4.number}</p>
-            <h3 class="chapter__title" id="ch-4">{c4.title}</h3>
-          </header>
-          <p class="chapter__lead" data-reveal>{c4.text}</p>
-        </div>
       </div>
-    </article>
-  </div>
+    </div>
+  </article>
 </section>
 
 <style>
-  .story {
+  /* ---------- Bandas ---------- */
+  .chapter {
+    --bg: var(--marino);
+    --ink: var(--claro);
+    --accent: var(--oro);
     position: relative;
-    background: var(--marino);
-    padding: clamp(4.5rem, 12vh, 8rem) 0 clamp(3rem, 8vh, 5rem);
+    background: var(--bg);
+    color: var(--ink);
+    padding: clamp(4rem, 11vh, 7.5rem) 0;
   }
+  .chapter--1 { padding-top: clamp(4.5rem, 12vh, 8rem); }
+  .chapter--2 { --bg: var(--azul-escudo); --accent: var(--crema); }
+  /* Amarillo de la pared del pabellón (img2): rompe la secuencia de azules */
+  .chapter--3 { --bg: var(--oro); --ink: var(--marino); --accent: var(--marino); }
+  /* Rojo con la línea negra del escudo encima: azul, línea, franjas */
+  .chapter--4 { --bg: var(--rojo); --accent: var(--crema); border-top: clamp(8px, 1vw, 12px) solid #0f1511; }
+
+  .chapter__inner {
+    width: min(100% - 2 * var(--gutter), 1200px);
+    margin-inline: auto;
+    display: grid;
+    gap: clamp(2rem, 5vh, 3rem);
+  }
+  .chapter__text { display: grid; gap: 1.1rem; justify-items: start; }
+
   .story__title {
-    width: min(100% - 2 * var(--gutter), var(--max));
-    margin: 0 auto clamp(2rem, 5vh, 3.5rem);
     font-size: var(--step-4);
     font-stretch: 118%;
     color: var(--claro);
   }
 
-  /* ---------- Páginas ---------- */
-  .stack {
-    --page-r: 22px; /* páginas grandes; controles y tarjetas usan 14px, papel 3px */
-    width: min(100% - 1.25rem, 1320px);
-    margin-inline: auto;
-    display: grid;
-    gap: 1.25rem;
-  }
-  .chapter {
-    --bg: var(--crema-2);
-    --ink: var(--marino);
-    --accent: var(--rojo-texto);
-    position: relative;
-    border-radius: var(--page-r);
-    background: var(--bg);
-    color: var(--ink);
-    overflow: clip;
-    transform-origin: 50% 0;
-    box-shadow: 0 -1px 0 rgb(255 255 255 / 0.08), 0 -24px 50px -24px rgb(0 0 0 / 0.55);
-  }
-  .chapter--2 { --bg: color-mix(in oklch, var(--crema), white 55%); }
-  .chapter--3 { --bg: var(--azul-camiseta); --ink: var(--crema); --accent: var(--crema); }
-  .chapter--4 { --bg: var(--rojo); --ink: var(--crema); --accent: var(--crema); }
-  .chapter__body {
-    position: relative;
-    height: 100%;
-    padding: clamp(1.6rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 5rem);
-    display: grid;
-    align-content: start;
-    gap: 1.1rem;
-  }
-  .chapter__shade {
-    position: absolute;
-    inset: 0;
-    background: var(--marino);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .chapter__head { display: grid; gap: 0.6rem; }
+  .chapter__head { display: grid; gap: 0.6rem; justify-items: inherit; }
   .chapter__num {
     display: grid;
     place-items: center;
@@ -154,37 +136,45 @@ const [c1, c2, c3, c4] = content.story.chapters;
   .chapter__lead {
     font-size: var(--step-1);
     line-height: 1.4;
-    max-width: 34ch;
+    max-width: 36ch;
   }
   .chapter__lead--big {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--step-2);
-    line-height: 1.12;
+    line-height: 1.15;
     font-stretch: 90%;
-    max-width: 20ch;
+    max-width: 24ch;
   }
   .chapter__punch {
-    margin-top: 0.8rem;
+    margin-top: 0.6rem;
     font-family: var(--font-display);
     font-weight: 900;
-    font-size: min(var(--step-3), 7svh);
+    font-size: var(--step-3);
     font-stretch: 115%;
     line-height: 1;
-    color: var(--rojo);
-    max-width: none;
+    color: var(--oro);
   }
 
   /* 02 · copia impresa */
-  .chapter--2 .chapter__body { gap: 2rem; }
+  .chapter__media { display: grid; justify-items: center; }
   .print {
-    justify-self: center;
     width: min(80vw, 24rem);
-    padding: 10px 10px 34px;
+    padding: 10px 10px 0;
     background: white;
     border-radius: var(--radius-paper);
-    box-shadow: 0 1px 2px color-mix(in oklch, var(--marino), transparent 80%), 0 22px 40px -22px color-mix(in oklch, var(--marino), transparent 45%);
-    transform: rotate(2.5deg);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 28px 50px -24px rgb(0 0 0 / 0.6);
+    transform: rotate(-2.5deg);
+  }
+  .print__caption {
+    padding: 0.7rem 0.25rem 0.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 92%;
+    font-size: var(--step-0);
+    line-height: 1.15;
+    text-align: center;
+    color: var(--marino);
   }
   .print :global(.print__img) {
     width: 100%;
@@ -199,7 +189,6 @@ const [c1, c2, c3, c4] = content.story.chapters;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    justify-self: start;
     min-height: 48px;
     font-weight: 650;
     color: inherit;
@@ -209,12 +198,10 @@ const [c1, c2, c3, c4] = content.story.chapters;
   .chapter__link svg { width: 1.2em; height: 1.2em; }
 
   /* 04 · saque inicial: círculo central con el balón del escudo */
-  .chapter--4 .chapter__body { gap: 1.5rem; }
   .kickoff {
     position: relative;
     width: min(70vw, 20rem);
     aspect-ratio: 1;
-    justify-self: center;
     color: var(--crema);
     overflow: clip;
     border-radius: 50%;
@@ -243,39 +230,28 @@ const [c1, c2, c3, c4] = content.story.chapters;
     background: url('/escudo.svg') no-repeat;
     background-size: 255.4% auto;
     background-position: 50% 66.7%;
-    box-shadow: 0 10px 18px -8px color-mix(in oklch, var(--marino), transparent 40%);
+    box-shadow: 0 10px 18px -8px rgb(0 0 0 / 0.5);
     animation: ball-bob 2.4s var(--ease-inout) infinite alternate;
   }
   @keyframes ball-bob { to { transform: translateY(-6%); } }
 
-  /* ---------- ≥768 px: páginas pegadas que se apilan ---------- */
+  /* ---------- ≥768 px: dos columnas y alineación alterna ---------- */
   @media (min-width: 768px) {
-    .stack { gap: 0; }
-    .chapter {
-      position: sticky;
-      top: calc(65px + 0.75rem + var(--i) * 14px);
-      height: calc(100svh - 65px - 4.5rem);
-      min-height: 30rem;
-      margin-bottom: 9vh;
+    .chapter--right .chapter__inner {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: 6vw;
     }
-    .chapter:last-child { margin-bottom: 0; }
-    /* Todo el contenido cabe en la página: tamaños y márgenes limitados también por el alto */
-    .chapter__body { align-content: safe center; padding-block: clamp(1.5rem, 6svh, 4.5rem); }
-    .chapter__title { font-size: min(var(--step-3), 7svh); }
-    .chapter--1 .chapter__lead { font-size: min(var(--step-2), 4.4svh); line-height: 1.3; max-width: 34ch; }
-    .chapter--1 .chapter__punch { margin-top: clamp(1rem, 4svh, 2.5rem); }
-    .chapter--2 .chapter__body { grid-template-columns: 1fr minmax(0, 0.85fr); align-items: center; column-gap: 5vw; }
-    .chapter--2 .print { width: min(30vw, 50svh); }
-    .chapter--3 .chapter__lead--big { font-size: min(var(--step-2), 5svh); max-width: 24ch; }
-    .chapter--4 .chapter__body { grid-template-columns: minmax(0, 0.9fr) 1fr; align-items: center; column-gap: 5vw; }
-    .chapter--4 .kickoff { width: min(34vw, 50svh); }
-  }
-  @media (min-width: 1024px) {
-    .chapter { top: calc(7rem + var(--i) * 14px); height: calc(100svh - 8.25rem); }
+    /* Medio a la izquierda, texto a la derecha y alineado a la derecha */
+    .chapter--right .chapter__media { grid-column: 1; grid-row: 1; }
+    .chapter--right .chapter__text { grid-column: 2; justify-items: end; text-align: right; }
+    .chapter--2 .print { width: min(30vw, 50svh, 26rem); }
+    .chapter--4 .kickoff { width: min(32vw, 46svh, 22rem); }
+    .chapter--1 .chapter__lead { font-size: var(--step-2); line-height: 1.3; max-width: 30ch; }
+    .chapter--3 .chapter__lead--big { font-size: var(--step-3); max-width: 20ch; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .chapter { position: relative; top: auto; height: auto; min-height: 0; margin-bottom: 1.25rem; }
     .kickoff__ball { animation: none; }
   }
 </style>

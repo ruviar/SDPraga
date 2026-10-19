@@ -7,13 +7,19 @@
  */
 import { siteConfig } from './site.config';
 
-const { president, coach } = siteConfig.founders;
+const { names, president, coach } = siteConfig.founders;
 
-/** "los hermanos Mazo", o con nombres y roles cuando el cliente los dé. */
+/** "Mateo y José Luis" (solo nombres de pila) y "Mateo y José Luis Mazo". */
+const foundersGiven = names.length ? `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}` : '';
+const foundersNames = foundersGiven ? `${foundersGiven} Mazo` : '';
+
+/** Con roles si el cliente los confirma; si no, sin asignar quién es quién. */
 const foundersSentence =
   president && coach
-    ? `S.D. Praga lo fundan los hermanos Mazo: ${president}, presidente, y ${coach}, entrenador.`
-    : 'S.D. Praga lo fundan los hermanos Mazo: uno como presidente, el otro como entrenador.'; // [chat]
+    ? `S.D. Praga lo fundan los hermanos Mazo: ${president}, presidente, y ${coach}, entrenador.` // [chat] + roles
+    : foundersNames
+      ? `S.D. Praga lo fundan los hermanos ${foundersNames}: uno como entrenador, el otro como presidente.` // [chat] frase literal del cliente
+      : 'S.D. Praga lo fundan los hermanos Mazo: uno como presidente, el otro como entrenador.'; // [chat]
 
 export const content = {
   name: 'S.D. Praga', // [chat] + [img:escudo]
@@ -56,7 +62,11 @@ export const content = {
         number: '02',
         title: 'Los hermanos Mazo', // [chat]
         text: foundersSentence,
-        photoAlt: 'Dos hombres sonríen abrazados sujetando una copa en un pabellón deportivo.', // [img:img2] descripción neutra, sin identificar
+        // [chat] el cliente confirma que son ellos; no se dice quién es quién en la foto
+        caption: foundersGiven || 'Los hermanos Mazo', // [chat] solo nombres de pila en la foto
+        photoAlt: foundersNames
+          ? `${foundersNames} sonríen abrazados sujetando una copa en un pabellón deportivo.`
+          : 'Dos hombres sonríen abrazados sujetando una copa en un pabellón deportivo.', // [img:img2]
       },
       {
         id: 'une',

@@ -398,6 +398,10 @@ async function logos() {
 async function equipo() {
   console.log('Equipo: derivados…');
   await derive('equipo', `${SRC}/equipo.jpeg`, { widths: [640, 960, 1280, 1402] });
+  // Fondo del hero: solo las personas (fuera el rótulo «S.D PRAGA» y el lema de la parte
+  // baja, para no duplicar el nombre). Va difuminado, así que basta con anchos pequeños.
+  const people = await sharp(`${SRC}/equipo.jpeg`).extract({ left: 0, top: 0, width: 1402, height: 790 }).png().toBuffer();
+  await derive('hero-equipo', people, { widths: [640, 960, 1280] });
 }
 
 /* ------------------------------------------------------------------ */

@@ -1,7 +1,7 @@
 ---
-// Valores: tres palabras sueltas que, con el scroll, encajan como piezas y resuelven
-// la ecuación "= Sentimiento de equipo". Al encajar, el eje de anchura de Anybody
-// iguala las tres palabras al mismo ancho (formación). Lógica: src/scripts/values.ts
+// Valores: «Nuestros valores» en grande desde el principio; en escritorio, al bajar,
+// aparecen una a una ESFUERZO + CONFIANZA + DIVERSIÓN = SENTIMIENTO DE EQUIPO, ya en su
+// sitio (sin flotar antes). En móvil se muestra montado. Lógica: src/scripts/values.ts
 import { content } from '../content';
 import Court from './Court.astro';
 import Brush from './Brush.astro';
@@ -86,13 +86,13 @@ const [w1, w2, w3] = content.values.words;
     text-align: center;
   }
   .values__title {
-    font-family: var(--font-text);
-    font-weight: 650;
-    font-size: var(--step-1);
-    letter-spacing: 0;
-    color: var(--claro-2);
-    margin-bottom: clamp(1rem, 3svh, 2rem);
+    font-size: min(var(--step-4), 10svh);
+    font-stretch: 118%;
+    color: var(--claro);
+    margin-bottom: clamp(1.25rem, 4svh, 2.75rem);
   }
+  /* Escritorio con JS: la ecuación está oculta hasta que el scroll la va mostrando */
+  :global(.js) .values[data-mode='scrub'] :is(.values__word, .values__op, .values__result) { opacity: 0; }
   .values__eq {
     max-width: none;
     display: grid;

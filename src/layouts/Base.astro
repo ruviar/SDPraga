@@ -12,9 +12,10 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
 const { phone, email } = siteConfig.contact;
 const ig = siteConfig.social.instagram;
 
-// JSON-LD: solo campos verificados (nombre, logo, fundadores "hermanos Mazo").
+// JSON-LD: solo campos verificados (nombre, logo, fundadores José Luis y Mateo Mazo).
 // Teléfono, email y redes se añaden solos cuando existan en site.config.ts.
-const founders = [siteConfig.founders.president, siteConfig.founders.coach].map((given) =>
+const founderNames: readonly string[] = siteConfig.founders.names.length ? siteConfig.founders.names : ['', ''];
+const founders = founderNames.map((given) =>
   given ? { '@type': 'Person', givenName: given, familyName: 'Mazo' } : { '@type': 'Person', familyName: 'Mazo' },
 );
 const jsonLd: Record<string, unknown> = {

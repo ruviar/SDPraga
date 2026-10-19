@@ -21,13 +21,16 @@ export const siteConfig = {
     instagram: '',
   },
 
-  /** Hermanos Mazo: nombres de pila y rol. PENDIENTE (pregunta 1). Vacío = "los hermanos Mazo" a secas. */
+  /** Hermanos Mazo. Nombres dados por el cliente (19-10-2026).
+   *  Rol de cada uno PENDIENTE (pregunta 1): mientras esté vacío se dice
+   *  "uno como presidente, el otro como entrenador" sin asignarlo. */
   founders: {
-    president: '', // p. ej. 'Javier'
-    coach: '', // p. ej. 'Luis'
+    names: ['Mateo', 'José Luis'],
+    president: '', // nombre de pila del presidente, cuando se confirme
+    coach: '', // nombre de pila del entrenador, cuando se confirme
   },
 
-  /** img2 en el capítulo "Los hermanos Mazo". Confirmar que son ellos (pregunta 1). */
+  /** img2 en el capítulo "Los hermanos Mazo" (el cliente confirma que son ellos). */
   showFoundersPhoto: true,
 
   /** Sección "Momentos" (portada de recuerdo, img1). Solo con permiso explícito (preguntas 3 y 4). */

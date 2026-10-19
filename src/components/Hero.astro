@@ -3,12 +3,15 @@ import { content } from '../content';
 import Crest from './Crest.astro';
 import Brush from './Brush.astro';
 import Button from './Button.astro';
+import Picture from './Picture.astro';
 ---
 
 <section class="hero mesh" id="inicio" aria-labelledby="hero-title" data-hero>
-  <!-- Móvil y tableta: el escudo como fondo, oscurecido, con el nombre encima -->
+  <!-- Fondo: la ilustración del equipo, difuminada y oscurecida, con el nombre encima.
+       Decorativa (alt vacío): la misma ilustración tiene su texto alternativo en Familia.
+       `sizes` pide un ancho menor del que ocupa porque va difuminada. -->
   <div class="hero__bg" aria-hidden="true">
-    <img src="/escudo.svg" width="434" height="549" alt="" fetchpriority="high" decoding="sync" draggable="false" />
+    <Picture name="hero-equipo" alt="" sizes="60vw" loading="eager" fetchpriority="low" imgClass="hero__photo" />
   </div>
 
   <div class="hero__crest">
@@ -51,40 +54,41 @@ import Button from './Button.astro';
   }
 
 
-  /* ---------- Móvil / tableta: escudo de fondo con velo oscuro ---------- */
+  /* ---------- Fondo: ilustración del equipo difuminada bajo un velo ---------- */
   .hero__bg {
     position: absolute;
-    inset: 0;
+    inset: 65px 0 0;
     z-index: -1;
-    display: grid;
-    place-items: center;
-    padding-top: 65px;
     overflow: clip;
     pointer-events: none;
   }
-  /* Escudo grande, centrado detrás del nombre y apagado: marca de agua, no un segundo título */
-  .hero__bg img {
-    width: min(118vw, 84svh * 0.79, 44rem);
-    height: auto;
-    margin-top: -6svh;
-    filter: brightness(0.62) saturate(0.85) drop-shadow(0 40px 60px rgb(0 0 0 / 0.5));
+  .hero__bg :global(picture) { position: absolute; inset: 0; }
+  /* multiply: el blanco de la ilustración toma el azul del hero; blur + brillo la apagan */
+  .hero__bg :global(.hero__photo) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0%;
+    mix-blend-mode: multiply;
+    filter: blur(5px) brightness(0.78) saturate(1.05);
+    /* El escalado (oculta el borde difuminado) se ancla arriba: no recorta las cabezas */
+    transform: scale(1.06);
+    transform-origin: 50% 0%;
     user-select: none;
   }
-  /* Velo: deja ver el escudo arriba y oscurece hacia el texto para que se lea encima */
+  /* Velo marino: más claro arriba (se ve el equipo), oscuro donde va el texto */
   .hero__bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(90% 60% at 50% 38%, rgb(8 18 43 / 0.15) 0%, rgb(8 18 43 / 0.55) 75%),
-      linear-gradient(
-        to bottom,
-        rgb(8 18 43 / 0.35) 0%,
-        rgb(8 18 43 / 0.45) 40%,
-        rgb(8 18 43 / 0.72) 62%,
-        rgb(8 18 43 / 0.9) 82%,
-        var(--marino) 100%
-      );
+    background: linear-gradient(
+      to bottom,
+      rgb(8 18 43 / 0.38) 0%,
+      rgb(8 18 43 / 0.45) 32%,
+      rgb(8 18 43 / 0.74) 56%,
+      rgb(8 18 43 / 0.9) 78%,
+      var(--marino) 100%
+    );
   }
   .hero__crest { display: none; }
 
@@ -153,7 +157,7 @@ import Button from './Button.astro';
   }
 
 
-  /* Escritorio: nombre abajo-izquierda y escudo estático en su recuadro a la derecha */
+  /* Escritorio: nombre abajo-izquierda y escudo estático, sin recuadro, a la derecha */
   @media (min-width: 1024px) {
     .hero {
       grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -163,17 +167,24 @@ import Button from './Button.astro';
       column-gap: 4vw;
     }
     .hero__copy { grid-area: 1 / 1; align-self: end; }
-    .hero__bg { display: none; }
+    .hero__bg { inset: 73px 0 0; }
+    .hero__bg :global(.hero__photo) { object-position: 50% 0%; filter: blur(7px) brightness(0.8) saturate(1.05); }
+    /* Escritorio: el texto va abajo a la izquierda, el velo se oscurece hacia ahí */
+    .hero__bg::after {
+      background:
+        linear-gradient(to right, rgb(8 18 43 / 0.62) 0%, rgb(8 18 43 / 0.3) 55%, rgb(8 18 43 / 0.2) 100%),
+        linear-gradient(to bottom, rgb(8 18 43 / 0.15) 0%, rgb(8 18 43 / 0.25) 45%, rgb(8 18 43 / 0.75) 82%, var(--marino) 100%);
+    }
     .hero__crest {
       display: block;
       grid-area: 1 / 2;
-      align-self: end;
-      justify-self: end;
-      width: min(32vw, 66svh * 0.8);
+      align-self: center;
+      justify-self: center;
+      width: min(24vw, 52svh * 0.79);
       max-width: none;
-      margin: 0;
+      margin: 0 0 6svh;
+      translate: -3vw 0;
     }
-    .hero__crest :global(.crest) { aspect-ratio: 4 / 5; padding: 11% 14% 15%; }
     .hero {
       background:
         radial-gradient(55% 75% at 74% 42%, var(--azul-camiseta) 0%, color-mix(in oklch, var(--azul-camiseta), var(--azul-escudo) 55%) 40%, transparent 80%),

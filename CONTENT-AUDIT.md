@@ -14,8 +14,8 @@ Todo el texto vive en `src/content.ts` y `src/site.config.ts` (cada cadena lleva
 | Hero | «Club de fútbol para niños.» | chat |
 | Historia 01 | «El equipo nace de la inquietud de crear un club basado en valores: trabajo en equipo, sin individualidades.» | chat (cita casi literal) |
 | Historia 01 | «Aquí nadie juega solo.» | chat (paráfrasis de «no hay individualidades»; ver pregunta 9) |
-| Historia 02 | «S.D. Praga lo fundan los hermanos Mazo: uno como presidente, el otro como entrenador.» | chat (sin nombres de pila: PENDIENTE) |
-| Historia 02 | Foto img2 (recorte caras + copa) | img:img2 · **identidad sin confirmar** (pregunta 1). Alt neutro, sin nombres |
+| Historia 02 | «S.D. Praga lo fundan los hermanos Mateo y José Luis Mazo: uno como entrenador, el otro como presidente.» | chat (frase literal del cliente, 19-10-2026; no asigna quién es quién) |
+| Historia 02 | Foto img2 (recorte caras + copa) con pie «Mateo y José Luis» | img:img2 + chat (el cliente confirma que son ellos y pide el pie solo con nombres de pila) |
 | Historia 03 | «Esfuerzo, confianza y diversión. Juntos suman sentimiento de equipo.» | chat (valores = sentimiento de equipo) |
 | Historia 04 | «Somos un club recién nacido. Lo que venga lo escribimos juntos.» | chat («recién empezado») + brief |
 | Valores | ESFUERZO + CONFIANZA + DIVERSIÓN = SENTIMIENTO DE EQUIPO | chat |
@@ -38,7 +38,7 @@ Solo aparecen si se rellenan en `site.config.ts`: «Llamar», «Escribir», «Wh
 | Imagen | Alt | Fuente |
 |---|---|---|
 | Escudo (hero) | Escudo de S.D. Praga: banda azul con el nombre, franjas verticales rojas y blancas, un balón y una estrella roja. | img:escudo |
-| img2 | Dos hombres sonríen abrazados sujetando una copa en un pabellón deportivo. | img:img2 (descripción, no identifica) |
+| img2 | Mateo y José Luis Mazo sonríen abrazados sujetando una copa en un pabellón deportivo. | img:img2 + chat (no dice quién es quién) |
 | equipo.jpeg | Ilustración del equipo S.D. Praga: adultos con sudaderas azul marino y niños con la equipación azul y roja, junto al nombre del club, el escudo y el lema «Más que un equipo, una familia». | img:equipo (sin cifras ni nombres) |
 | Logos | Nombre del patrocinador (no hay texto visible al lado) | img:aguero / img:dupla / img:travion |
 | Escudos del menú y pie | `alt=""` (decorativos, el enlace lleva texto) | — |
@@ -49,7 +49,7 @@ Solo aparecen si se rellenan en `site.config.ts`: «Llamar», «Escribir», «Wh
 
 - `<title>` «S.D. Praga · Club de fútbol para niños» (brief/chat).
 - Meta description: nombre + «club de fútbol para niños fundado por los hermanos Mazo y basado en valores: esfuerzo, confianza y diversión» + lema (chat + img:equipo).
-- JSON-LD `SportsOrganization`: `name`, `sport: Fútbol`, `slogan` (lema), `logo`, `founder` = dos `Person` con `familyName: "Mazo"` (nombres de pila vacíos hasta que existan). **Sin** dirección, teléfono, email, fecha de fundación ni URL hasta que el cliente los dé (se añaden solos desde `site.config.ts`).
+- JSON-LD `SportsOrganization`: `name`, `sport: Fútbol`, `slogan` (lema), `logo`, `founder` = dos `Person`: Mateo Mazo y José Luis Mazo (chat), sin rol. **Sin** dirección, teléfono, email, fecha de fundación ni URL hasta que el cliente los dé (se añaden solos desde `site.config.ts`).
 
 ## Retirado o no publicado (sin fuente o pendiente de permiso)
 
@@ -57,7 +57,7 @@ Solo aparecen si se rellenan en `site.config.ts`: «Llamar», «Escribir», «Wh
 |---|---|---|
 | Portada img1 («SD Praga impone su ley en La Mina», 3-1, «campeón», «Líderes invictos») | Construida pero **oculta** (`showMoments: false`) | Mezcla un diario real (AS) con contenido personalizado; casi seguro es un regalo/montaje. Además muestra niños reconocibles. Si se activa, siempre con la etiqueta «Portada de recuerdo», nunca como prensa ni título. |
 | Fecha de fundación, localidad, pabellón, horarios, categorías, edades, nº de jugadores, palmarés, resultados | No publicado | Sin fuente |
-| Nombres de los hermanos Mazo y quién es presidente/entrenador | No publicado | PENDIENTE (se rellena en `site.config.ts > founders`) |
+| Quién de los dos es presidente y quién entrenador | No publicado | PENDIENTE (`site.config.ts > founders.president/coach`) |
 | Teléfono, email, Instagram, WhatsApp, dominio | No publicado | No existen todavía |
 | Descripciones de patrocinadores | No publicado | Solo nombre + logo (brief) |
 | Enlaces de patrocinadores | No publicado | Sin URL del cliente |

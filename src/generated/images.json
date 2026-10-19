@@ -101,5 +101,20 @@
       "jpg"
     ],
     "alpha": false
+  },
+  "hero-equipo": {
+    "width": 1402,
+    "height": 790,
+    "widths": [
+      640,
+      960,
+      1280
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpg"
+    ],
+    "alpha": false
   }
 }

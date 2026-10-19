@@ -1,91 +1,28 @@
 ---
-// Escudo del hero: estático, dentro de un recuadro (lámina de club) con sombra fija.
-// Detrás, el círculo central de la pista; abajo, las franjas del escudo como zócalo.
+// Escudo del hero (escritorio): estático, sin recuadro, con sombra fija.
 import escudo from '../generated/escudo.json';
-import Court from './Court.astro';
 
 const [, , vw, vh] = escudo.viewBox.split(' ').map(Number);
 ---
 
-<figure class="crest">
-  <div class="crest__court" aria-hidden="true"><Court class="crest__lines" /></div>
-  <img
-    class="crest__face"
-    src="/escudo.svg"
-    width={Math.round(vw / 2)}
-    height={Math.round(vh / 2)}
-    alt="Escudo de S.D. Praga: banda azul con el nombre, franjas verticales rojas y blancas, un balón y una estrella roja."
-    fetchpriority="high"
-    decoding="sync"
-    draggable="false"
-  />
-  <div class="crest__bands" aria-hidden="true">{Array.from({ length: 7 }, () => <span />)}</div>
-</figure>
+<img
+  class="crest"
+  src="/escudo.svg"
+  width={Math.round(vw / 2)}
+  height={Math.round(vh / 2)}
+  alt="Escudo de S.D. Praga: banda azul con el nombre, franjas verticales rojas y blancas, un balón y una estrella roja."
+  fetchpriority="high"
+  decoding="sync"
+  draggable="false"
+/>
 
 <style>
   .crest {
-    position: relative;
-    display: grid;
-    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-    place-items: center;
-    aspect-ratio: 4 / 5;
-    padding: 11% 14% 15%;
-    border-radius: var(--radius);
-    overflow: clip;
-    isolation: isolate;
-    background:
-      radial-gradient(70% 55% at 50% 42%, color-mix(in oklch, var(--azul-camiseta), white 8%) 0%, transparent 70%),
-      linear-gradient(to bottom, var(--azul-camiseta), var(--azul-escudo) 55%, color-mix(in oklch, var(--azul-escudo), var(--marino) 60%));
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.18),
-      0 0 0 1px rgb(0 0 0 / 0.25),
-      0 50px 90px -40px rgb(0 0 0 / 0.75);
-  }
-  /* Malla de camiseta dentro del recuadro */
-  .crest::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image: radial-gradient(circle, rgb(255 255 255 / 0.09) 0 1.1px, transparent 1.5px);
-    background-size: 7px 7px;
-  }
-  .crest__court {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    color: var(--cian);
-    pointer-events: none;
-  }
-  .crest__court :global(.crest__lines) {
-    position: absolute;
-    width: 520%;
-    left: 50%;
-    top: 46%;
-    translate: -50% -50%;
-    opacity: 0.32;
-    stroke-width: 0.45;
-    --draw: 1;
-  }
-  .crest__face {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 22px 22px rgb(0 0 0 / 0.42)) drop-shadow(0 4px 4px rgb(0 0 0 / 0.3));
+    height: auto;
+    filter: drop-shadow(0 28px 30px rgb(0 0 0 / 0.5)) drop-shadow(0 6px 6px rgb(0 0 0 / 0.35));
     user-select: none;
     -webkit-user-drag: none;
   }
-  .crest__bands {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 4.5%;
-    min-height: 10px;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    border-top: 3px solid #0f1511;
-  }
-  .crest__bands span { background: var(--rojo); }
-  .crest__bands span:nth-child(even) { background: var(--crema); }
 </style>
