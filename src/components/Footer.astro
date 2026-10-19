@@ -1,0 +1,41 @@
+---
+import { content } from '../content';
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <img class="footer__crest" src="/escudo.svg" width="64" height="81" alt="" loading="lazy" decoding="async" />
+    <p class="footer__motto">{content.motto}</p>
+    <p class="footer__legal">{content.footer.copyright}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--marino);
+    color: var(--crema);
+    padding: 0 0 calc(7rem + env(safe-area-inset-bottom));
+  }
+  .footer__inner {
+    width: min(100% - 2 * var(--gutter), 1100px);
+    margin-inline: auto;
+    padding-top: 2.5rem;
+    border-top: 1px solid color-mix(in oklch, var(--crema), transparent 85%);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.4rem 1.2rem;
+  }
+  .footer__crest { grid-row: span 2; width: 52px; height: auto; }
+  .footer__motto {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 92%;
+    font-size: var(--step-1);
+    line-height: 1.1;
+  }
+  .footer__legal { font-size: var(--step--1); color: color-mix(in oklch, var(--crema), var(--marino) 25%); }
+  @media (min-width: 1024px) {
+    .footer { padding-bottom: 3rem; }
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+// <picture> AVIF/WebP + fallback a partir del manifest de scripts/prepare-assets.mjs
+import images from '../generated/images.json';
+
+type Name = keyof typeof images;
+interface Props {
+  name: Name;
+  alt: string;
+  sizes: string;
+  class?: string;
+  imgClass?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  style?: string;
+}
+const { name, alt, sizes, class: cls, imgClass, loading = 'lazy', fetchpriority, style } = Astro.props;
+const m = images[name] as { width: number; height: number; widths: number[]; formats: string[] };
+const fallback = m.formats.includes('png') ? 'png' : 'jpg';
+const set = (f: string) => m.widths.map((w) => `/img/${name}-${w}.${f} ${w}w`).join(', ');
+const largest = Math.max(...m.widths);
+---
+
+<picture class={cls}>
+  {m.formats.includes('avif') && <source type="image/avif" srcset={set('avif')} sizes={sizes} />}
+  {m.formats.includes('webp') && <source type="image/webp" srcset={set('webp')} sizes={sizes} />}
+  <img
+    src={`/img/${name}-${largest}.${fallback}`}
+    srcset={set(fallback)}
+    sizes={sizes}
+    width={m.width}
+    height={m.height}
+    alt={alt}
+    loading={loading}
+    decoding="async"
+    fetchpriority={fetchpriority}
+    class={imgClass}
+    style={style}
+  />
+</picture>

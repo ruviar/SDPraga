@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Story from '../components/Story.astro';
+import Values from '../components/Values.astro';
+import Family from '../components/Family.astro';
+import Moments from '../components/Moments.astro';
+import Sponsors from '../components/Sponsors.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { siteConfig } from '../site.config';
+---
+
+<Base>
+  <!--
+    THESIS: el pabellón de fútbol sala como mundo. Rechaza el "hero centrado + 3 tarjetas":
+    la página se lee como el escudo (banda azul, línea negra, franjas rojas) y cada sección tiene su ritmo.
+    OWN-WORLD: colores del equipo como fondo, líneas de pista a escala real, franjas del escudo,
+    malla de camiseta; Anybody con eje de anchura vivo + Instrument Sans; botones con canto.
+    STORY: quién es S.D. Praga (hermanos Mazo, valores), cómo se siente (familia), quién ayuda, cómo contactar.
+    FIRST VIEWPORT: escudo estático en un recuadro a la derecha, "S.D. PRAGA" gigante abajo-izquierda,
+    lema con pincel rojo, subtítulo, CTA "Conoce nuestra historia" (primario) + "Contacto".
+    FORM: brief fijado por el cliente (sin tirada de conceptos); solo movimiento vertical.
+  -->
+  <Nav />
+  <main id="contenido" tabindex="-1">
+    <Hero />
+    <Story />
+    <Values />
+    <Family />
+    {siteConfig.showMoments && <Moments />}
+    <Sponsors />
+    <Contact />
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  import '../scripts/boot';
+</script>

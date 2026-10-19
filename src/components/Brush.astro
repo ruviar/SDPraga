@@ -1,0 +1,16 @@
+---
+// Subrayado de pincel rojo, como el del lema en equipo.jpeg. Se revela con clip-path.
+interface Props { class?: string; }
+const { class: cls } = Astro.props;
+---
+
+<span class:list={['brush', cls]}>
+  <slot />
+  <svg class="brush__stroke" viewBox="0 0 400 26" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path
+      fill="currentColor"
+      d="M3 15.5C38 11 96 8.6 160 8c70-.6 151 .3 236-3.5l.8 3.1c-23 2.6-46 4.2-70 5.3 22 .5 40 .1 58-.6l-.4 2.6c-74 5.4-155 6.6-232 8.4-40 .9-78 2.2-116 3.9-6 .2-8.6-1.6-8.2-4 .3-1.8 1.5-3.4 3.4-3.7Z"
+    ></path>
+    <path fill="currentColor" opacity=".55" d="M40 21.5c60-2.3 140-3.3 222-4.6l.2 1.4c-78 2.2-152 3.6-222 5Z"></path>
+  </svg>
+</span>

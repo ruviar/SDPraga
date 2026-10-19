@@ -1,0 +1,17 @@
+/* Generado por scripts/prepare-assets.mjs: fallbacks métricamente ajustados (CLS 0). */
+@font-face {
+  font-family: 'Anybody Fallback';
+  src: local('Arial'), local('ArialMT'), local('Helvetica'), local('Liberation Sans');
+  size-adjust: 93.90%;
+  ascent-override: 84.66%;
+  descent-override: 25.56%;
+  line-gap-override: 0.00%;
+}
+@font-face {
+  font-family: 'Instrument Sans Fallback';
+  src: local('Arial'), local('ArialMT'), local('Helvetica'), local('Liberation Sans');
+  size-adjust: 103.76%;
+  ascent-override: 93.49%;
+  descent-override: 24.09%;
+  line-gap-override: 0.00%;
+}

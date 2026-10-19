@@ -1,0 +1,110 @@
+---
+// Patrocinadores: banda blanca a todo el ancho sobre el azul, con los logos en fila,
+// sin recuadros. Logos a color real, sin filtros; mismo peso visual por altura óptica.
+import { content } from '../content';
+import { siteConfig } from '../site.config';
+import images from '../generated/images.json';
+import Picture from './Picture.astro';
+
+type Img = { width: number; height: number };
+// Altura óptica: misma "área" aparente para logos de proporciones distintas.
+const optical = (name: string) => {
+  const m = (images as Record<string, Img>)[name];
+  const ar = m.width / m.height;
+  return Math.min(1, 1 / Math.sqrt(ar));
+};
+const urls = siteConfig.sponsorUrls as Record<string, string>;
+const list = content.sponsors.list.map((s) => ({ ...s, h: optical(s.image), url: urls[s.id] || '' }));
+---
+
+<section class="sponsors mesh" id="patrocinadores" aria-labelledby="sponsors-title" data-sponsors>
+  <div class="sponsors__head">
+    <h2 class="sponsors__title" id="sponsors-title" data-split>{content.sponsors.title}</h2>
+  </div>
+
+  <div class="sponsors__band">
+    <ul class="sponsors__row" role="list">
+      {
+        list.map((s) => {
+          const logo = (
+            <Picture
+              name={s.image as keyof typeof images}
+              alt={s.name}
+              sizes="(min-width: 1024px) 260px, 34vw"
+              imgClass={s.blend ? 'sponsors__img sponsors__img--blend' : 'sponsors__img'}
+            />
+          );
+          return (
+            <li class="sponsors__item" style={`--h:${s.h.toFixed(3)}`} data-sponsor>
+              {s.url ? (
+                <a class="sponsors__link" href={s.url} rel="noopener" target="_blank">
+                  {logo}
+                </a>
+              ) : (
+                logo
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sponsors {
+    position: relative;
+    padding: clamp(4.5rem, 11vh, 7rem) 0 clamp(4.5rem, 11vh, 7rem);
+    overflow: clip;
+    color: var(--claro);
+    border-top: clamp(8px, 1vw, 12px) solid #0f1511;
+    background:
+      radial-gradient(70% 45% at 30% 0%, color-mix(in oklch, var(--azul-camiseta), transparent 35%), transparent 70%),
+      var(--azul-escudo);
+  }
+  .sponsors__head {
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin: 0 auto clamp(2rem, 5vh, 3rem);
+    text-align: center;
+  }
+  .sponsors__title {
+    font-size: var(--step-3);
+    font-stretch: 84%;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--claro);
+  }
+
+  /* Banda blanca a todo el ancho con los logos uno detrás de otro */
+  .sponsors__band {
+    background: var(--crema);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.4) inset, 0 24px 40px -28px rgb(0 0 0 / 0.6);
+  }
+  .sponsors__row {
+    width: min(100% - 2 * var(--gutter), 1100px);
+    margin-inline: auto;
+    padding: clamp(1.6rem, 4vw, 2.75rem) 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 2.5rem) clamp(2rem, 8vw, 6.5rem);
+  }
+  /* Fondo propio = base del multiply (la animación de entrada aísla cada logo) */
+  .sponsors__item { display: grid; place-items: center; background: var(--crema); }
+  .sponsors__link { display: block; border-radius: 6px; }
+  .sponsors :global(.sponsors__img) {
+    height: calc(var(--h) * clamp(4.2rem, 11vw, 6.5rem));
+    width: auto;
+    max-width: min(42vw, 280px);
+    object-fit: contain;
+  }
+  /* El blanco del archivo desaparece sobre la banda */
+  .sponsors :global(.sponsors__img--blend) { mix-blend-mode: multiply; }
+
+  @media (max-width: 479px) {
+    .sponsors__row { gap: 1.5rem 2.25rem; }
+    .sponsors :global(.sponsors__img) { height: calc(var(--h) * 4rem); }
+  }
+</style>

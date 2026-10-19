@@ -1,0 +1,12 @@
+{
+  "interiorMismatchPct": 0,
+  "edgeMismatchPct": 14.07,
+  "totalMismatchPct": 0.413,
+  "colors": {
+    "dark": "#0F1511",
+    "blue": "#074D87",
+    "cream": "#FBF8F3",
+    "red": "#C9312C"
+  },
+  "svgBytes": 40235
+}

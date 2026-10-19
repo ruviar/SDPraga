@@ -1,0 +1,105 @@
+{
+  "escudo": {
+    "width": 867,
+    "height": 1097,
+    "widths": [
+      160,
+      320,
+      640
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": true
+  },
+  "portada": {
+    "width": 1186,
+    "height": 1647,
+    "widths": [
+      480,
+      720,
+      1000
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpg"
+    ],
+    "alpha": false
+  },
+  "mazo": {
+    "width": 1024,
+    "height": 1127,
+    "widths": [
+      480,
+      720,
+      1024
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpg"
+    ],
+    "alpha": false
+  },
+  "logo-dupla": {
+    "width": 766,
+    "height": 717,
+    "widths": [
+      240,
+      480
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": false
+  },
+  "logo-aguero": {
+    "width": 515,
+    "height": 227,
+    "widths": [
+      240,
+      480
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": false
+  },
+  "logo-travion": {
+    "width": 1660,
+    "height": 432,
+    "widths": [
+      320,
+      640
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": true
+  },
+  "equipo": {
+    "width": 1402,
+    "height": 1122,
+    "widths": [
+      640,
+      960,
+      1280,
+      1402
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpg"
+    ],
+    "alpha": false
+  }
+}

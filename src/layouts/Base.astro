@@ -1,0 +1,84 @@
+---
+import '@fontsource-variable/anybody/wdth.css';
+import '@fontsource-variable/instrument-sans/wght.css';
+import '../styles/fallbacks.css';
+import '../styles/global.css';
+import anybodyLatin from '@fontsource-variable/anybody/files/anybody-latin-wdth-normal.woff2?url';
+import { content } from '../content';
+import { siteConfig } from '../site.config';
+
+const site = Astro.site;
+const abs = (p: string) => (site ? new URL(p, site).href : p);
+const { phone, email } = siteConfig.contact;
+const ig = siteConfig.social.instagram;
+
+// JSON-LD: solo campos verificados (nombre, logo, fundadores "hermanos Mazo").
+// Teléfono, email y redes se añaden solos cuando existan en site.config.ts.
+const founders = [siteConfig.founders.president, siteConfig.founders.coach].map((given) =>
+  given ? { '@type': 'Person', givenName: given, familyName: 'Mazo' } : { '@type': 'Person', familyName: 'Mazo' },
+);
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsOrganization',
+  name: content.name,
+  sport: 'Fútbol',
+  slogan: content.motto.replace(/\.$/, ''),
+  logo: abs('/escudo.svg'),
+  founder: founders,
+};
+if (site) jsonLd.url = site.href;
+if (phone) jsonLd.telephone = phone;
+if (email) jsonLd.email = email;
+if (ig) jsonLd.sameAs = [`https://www.instagram.com/${ig}/`];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{content.meta.title}</title>
+    <meta name="description" content={content.meta.description} />
+    <meta name="theme-color" content="#074D88" />
+    <meta name="color-scheme" content="dark" />
+    {site && <link rel="canonical" href={site.href} />}
+
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={content.name} />
+    <meta property="og:title" content={content.meta.title} />
+    <meta property="og:description" content={content.meta.description} />
+    <meta property="og:image" content={abs('/og.png')} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Escudo de S.D. Praga sobre fondo azul con franjas rojas y blancas." />
+    {site && <meta property="og:url" content={site.href} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={content.meta.title} />
+    <meta name="twitter:description" content={content.meta.description} />
+    <meta name="twitter:image" content={abs('/og.png')} />
+
+    <link rel="preload" href={anybodyLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/escudo.svg" as="image" type="image/svg+xml" fetchpriority="high" />
+
+    <!-- Intro de franjas: solo en la primera visita (y nunca con reduced-motion, ver CSS) -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try {
+        if (localStorage.getItem('sdp-visto')) document.documentElement.classList.add('no-intro');
+        else localStorage.setItem('sdp-visto', '1');
+      } catch (e) {}
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <div class="intro" aria-hidden="true">
+      {Array.from({ length: 7 }, (_, i) => <span style={`--i:${i}`} />)}
+    </div>
+    <a class="skip-link" href="#contenido">{content.ui.skip}</a>
+    <slot />
+  </body>
+</html>

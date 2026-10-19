@@ -1,0 +1,138 @@
+---
+// Contacto guiado por site.config.ts. Vacío -> estado honesto "Próximamente".
+// Con datos -> botones físicos Llamar (tel:) / Escribir (mailto:) / WhatsApp (wa.me).
+// Sin formulario: no hay backend ni se recogen datos de menores.
+import { content } from '../content';
+import { siteConfig } from '../site.config';
+import Button from './Button.astro';
+import Court from './Court.astro';
+
+const { phone, email, whatsapp } = siteConfig.contact;
+const ig = siteConfig.social.instagram;
+const wa = (whatsapp || phone).replace(/\D/g, '');
+const hasAny = Boolean(phone || email || wa || ig);
+const c = content.contact;
+---
+
+<section class="contact mesh" id="contacto" aria-labelledby="contact-title" data-contact>
+  <div class="contact__bands" aria-hidden="true">
+    {Array.from({ length: 7 }, () => <span />)}
+  </div>
+  <div class="contact__floor" aria-hidden="true">
+    <Court class="contact__court" />
+  </div>
+
+  <div class="contact__inner">
+    <h2 class="contact__title" id="contact-title">{c.title}</h2>
+    {
+      hasAny ? (
+        <div class="contact__actions">
+          {phone && (
+            <Button href={`tel:${phone.replace(/\s/g, '')}`} variant="crema">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h3l1.5 4.1-2 1.4a12 12 0 0 0 5.9 5.9l1.4-2 4.1 1.5v3A2.1 2.1 0 0 1 18.3 20 16.6 16.6 0 0 1 4 5.7a2.1 2.1 0 0 1 2.6-2.2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+              {c.call}
+            </Button>
+          )}
+          {email && (
+            <Button href={`mailto:${email}`} variant="crema">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h17v11h-17zM4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+              {c.write}
+            </Button>
+          )}
+          {wa && (
+            <Button href={`https://wa.me/${wa}`} variant="rojo" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.2-3.9A8 8 0 1 1 8 19.2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+              {c.whatsapp}
+            </Button>
+          )}
+          {ig && (
+            <Button href={`https://www.instagram.com/${ig}/`} variant="crema" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+              {c.instagram}
+            </Button>
+          )}
+        </div>
+      ) : (
+        <p class="contact__soon">{c.soon}</p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: var(--marino);
+    color: var(--crema);
+    padding: clamp(6rem, 16vh, 10rem) 0 clamp(4rem, 10vh, 6rem);
+  }
+  /* Franjas del escudo como canto superior: la transición al bloque marino */
+  .contact__bands {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 14px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .contact__bands span { background: var(--rojo); }
+  .contact__bands span:nth-child(even) { background: var(--crema); }
+
+  .contact__floor {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    color: var(--cian);
+    pointer-events: none;
+  }
+  .contact__floor :global(.contact__court) {
+    position: absolute;
+    width: max(150vw, 1300px);
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    opacity: 0.2;
+    stroke-width: 0.7;
+    --draw: 1;
+  }
+  :global(.js) .contact[data-mode='draw'] .contact__floor :global(.contact__court) { --draw: 0; }
+  @media (min-width: 1024px) { .contact__floor :global(.contact__court) { stroke-width: 0.45; } }
+
+  .contact__inner {
+    width: min(100% - 2 * var(--gutter), 1100px);
+    margin-inline: auto;
+    display: grid;
+    gap: clamp(1.8rem, 5vh, 3rem);
+    justify-items: center;
+    text-align: center;
+  }
+  .contact__title {
+    font-size: clamp(2.8rem, 12.4vw, 10rem);
+    font-weight: 900;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+  }
+  .contact__soon {
+    padding: 0.85rem 1.8rem;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--marino), var(--crema) 8%);
+    border: 1px solid color-mix(in oklch, var(--cian), transparent 65%);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 88%;
+    font-size: var(--step-1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--crema);
+  }
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+</style>

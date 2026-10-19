@@ -1,0 +1,284 @@
+/* =====================================================================
+   S.D. Praga · sistema visual
+   Mundo: la página se lee como el escudo, de arriba abajo, solo con los
+   colores del equipo: banda azul (camiseta) -> línea oscura -> franjas
+   rojas -> marino de las sudaderas. Textura: malla de camiseta.
+   Ver .claude/design.md
+   ===================================================================== */
+
+@property --wdth { syntax: '<number>'; inherits: true; initial-value: 100; }
+@property --draw { syntax: '<number>'; inherits: true; initial-value: 0; }
+
+:root {
+  /* Paleta extraída de los activos (contraste: .claude/qa/contrast.md) */
+  --azul-escudo: oklch(41.5% 0.116 251);   /* #074D88 banda del escudo */
+  --azul-camiseta: oklch(41.3% 0.213 264.3); /* #0A35BC camiseta (muestreada) */
+  --marino: oklch(19% 0.053 265.2);        /* #08122B sudaderas, "tinta" */
+  --rojo: oklch(55.4% 0.192 27.2);         /* #CB302C bandas del escudo */
+  --crema: oklch(98.6% 0.007 80.7);        /* #FDFAF5 fondo del escudo */
+  --cian: oklch(77.4% 0.124 229.5);        /* #50C4F5 ribetes de chaqueta */
+  --oro: oklch(80.2% 0.161 81.5);          /* #F2B21B pared del pabellón / marcador */
+
+  --crema-2: color-mix(in oklch, var(--crema), var(--marino) 5%);
+  --rojo-texto: color-mix(in oklch, var(--rojo), var(--marino) 16%); /* rojo para texto pequeño (AA sobre crema-2) */
+  --rojo-osc: color-mix(in oklch, var(--rojo), black 18%);
+  --tinta: var(--marino);
+  --tinta-2: color-mix(in oklch, var(--marino), var(--crema) 18%);
+  --claro: var(--crema);                                           /* texto sobre fondos de color */
+  --claro-2: color-mix(in oklch, var(--crema), var(--azul-escudo) 22%); /* secundario sobre azul/marino */
+  --linea: color-mix(in oklch, var(--azul-escudo), var(--crema) 20%);
+  --sombra: color-mix(in oklch, var(--marino), transparent 78%);
+
+  --font-display: 'Anybody Variable', 'Anybody Fallback', system-ui, sans-serif;
+  --font-text: 'Instrument Sans Variable', 'Instrument Sans Fallback', system-ui, sans-serif;
+
+  /* Escala fluida */
+  --step--1: clamp(0.875rem, 0.84rem + 0.15vw, 0.95rem);
+  --step-0: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.55rem);
+  --step-2: clamp(1.6rem, 1.35rem + 1.2vw, 2.3rem);
+  --step-3: clamp(2.2rem, 1.6rem + 2.8vw, 3.9rem);
+  --step-4: clamp(2.8rem, 1.7rem + 5.2vw, 6rem);
+
+  --gutter: clamp(1rem, 0.4rem + 3vw, 3rem);
+  --max: 1400px;
+  --radius: 14px;          /* controles y tarjetas */
+  --radius-paper: 3px;     /* fotos y papel */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);      /* expo.out */
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);   /* power3.inOut */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Capas */
+  --z-court: 0;
+  --z-content: 1;
+  --z-clock: 40;
+  --z-nav: 50;
+  --z-grain: 60;
+  --z-intro: 100;
+
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: clip;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
+body {
+  min-height: 100dvh;
+  background: var(--marino);
+  color: var(--claro);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Grano sutil (elemento fijo añadido tras `load` por boot.ts; no repinta al hacer scroll) */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  background: url('/img/grain.webp') repeat;
+  background-size: 120px;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+
+/* Malla de camiseta: perforaciones diminutas, como el tejido técnico de la equipación */
+.mesh { position: relative; isolation: isolate; }
+.mesh::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 50% 50%, rgb(255 255 255 / 0.075) 0 1.1px, transparent 1.5px);
+  background-size: 7px 7px;
+  -webkit-mask: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  mask: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+/* El grano se pide después de la carga: no compite con el LCP */
+.is-loaded body::after { background-image: url('/img/grain.webp'); }
+
+img, svg, picture { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.95; text-wrap: balance; letter-spacing: -0.02em; }
+p { text-wrap: pretty; max-width: 62ch; }
+
+::selection { background: var(--oro); color: var(--marino); }
+
+/* Foco: anillo cian con halo marino (visible sobre crema y sobre marino) */
+:focus-visible {
+  outline: 3px solid var(--cian);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 8px var(--marino);
+  border-radius: 6px;
+}
+/* Destinos de anclas (foco programático): sin anillo alrededor de toda la sección */
+[tabindex='-1']:focus { outline: none; box-shadow: none; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem; left: 0.75rem;
+  z-index: calc(var(--z-intro) + 1);
+  padding: 0.8rem 1.1rem;
+  background: var(--marino);
+  color: var(--crema);
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus-visible { transform: none; }
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
+}
+
+/* Trazo de pincel rojo (subrayado del lema, como en el arte de equipo.jpeg) */
+.brush {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+.brush__stroke {
+  position: absolute;
+  left: -3%;
+  bottom: -0.32em;
+  width: 106%;
+  height: 0.5em;
+  z-index: -1;
+  color: var(--rojo);
+  pointer-events: none;
+  overflow: visible;
+}
+.brush__stroke path { stroke-dasharray: 1; stroke-dashoffset: var(--brush-off, 0); }
+
+/* ---------- Botones ----------
+   Planos: sin canto ni sombra y sin movimiento. El estado se muestra con el color
+   (más claro al pasar el ratón, más oscuro al pulsar). */
+.btn {
+  --face: var(--azul-escudo);
+  --ink: var(--crema);
+  --hover: color-mix(in oklch, var(--face), white 12%);
+  --press: color-mix(in oklch, var(--face), black 14%);
+  display: inline-flex;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-weight: 650;
+  font-size: var(--step-0);
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border-radius: var(--radius);
+}
+.btn__face {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: 0.95em 1.45em;
+  border-radius: inherit;
+  background: var(--face);
+  transition: background-color 150ms ease-out;
+  white-space: nowrap;
+}
+.btn__face svg { width: 1.15em; height: 1.15em; flex: none; }
+
+.btn--rojo { --face: var(--rojo); }
+.btn--crema { --face: var(--crema); --ink: var(--marino); --hover: color-mix(in oklch, var(--crema), var(--marino) 8%); --press: color-mix(in oklch, var(--crema), var(--marino) 16%); }
+.btn--marino { --face: var(--marino); }
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover .btn__face { background: var(--hover); }
+}
+.btn[data-pressed] .btn__face,
+.btn:active .btn__face { background: var(--press); transition-duration: 60ms; }
+.btn:focus-visible { outline-offset: 4px; }
+
+/* ---------- Preloader: franjas del escudo (≤ 900 ms, solo CSS) ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-intro);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  pointer-events: none;
+}
+.intro span {
+  background: var(--rojo);
+  animation: intro-out 420ms var(--ease-inout) both;
+  animation-delay: calc(60ms + var(--i) * 30ms);
+}
+.intro span:nth-child(even) { background: var(--crema); --dir: 1; }
+@keyframes intro-out {
+  to { transform: translateY(calc((var(--dir, -1)) * 101%)); }
+}
+.no-intro .intro { display: none; }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+
+/* ---------- Pista de fútbol sala (motivo recurrente) ---------- */
+.court {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1; /* unidades de pista (10 cm); cada instancia lo ajusta a su escala */
+  stroke-linecap: round;
+}
+.court [pathLength] { stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw)); }
+.court .dot { fill: currentColor; stroke: none; opacity: var(--draw); }
+
+/* ---------- Secciones ---------- */
+.section { position: relative; z-index: var(--z-content); }
+@media (min-width: 1024px) { main > section[id] { scroll-margin-top: 73px; } }
+/* Secciones bajo el pliegue: el navegador no las maqueta hasta acercarse (carga más ligera).
+   `auto` recuerda el tamaño real una vez pintadas. Al usar el menú se desactiva (.cv-off). */
+#valores, #familia, #momentos, #patrocinadores, #contacto, .footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+.cv-off :is(#valores, #familia, #momentos, #patrocinadores, #contacto, .footer) { content-visibility: visible; }
+
+.kicker {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--rojo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

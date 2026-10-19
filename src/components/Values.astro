@@ -1,0 +1,140 @@
+---
+// Valores: tres palabras sueltas que, con el scroll, encajan como piezas y resuelven
+// la ecuación "= Sentimiento de equipo". Al encajar, el eje de anchura de Anybody
+// iguala las tres palabras al mismo ancho (formación). Lógica: src/scripts/values.ts
+import { content } from '../content';
+import Court from './Court.astro';
+import Brush from './Brush.astro';
+
+const [w1, w2, w3] = content.values.words;
+---
+
+<section class="values mesh" id="valores" aria-labelledby="values-title" data-values>
+  <div class="values__stage" data-values-stage>
+    <div class="values__floor" aria-hidden="true">
+      <Court class="values__court" />
+    </div>
+    <div class="values__inner">
+      <h2 class="values__title" id="values-title">{content.values.title}</h2>
+      <p class="values__eq" data-values-eq>
+        <span class="values__word" data-word="0">{w1}</span>
+        <span class="values__op" aria-hidden="true" data-op>+</span><span class="visually-hidden">más</span>
+        <span class="values__word" data-word="1">{w2}</span>
+        <span class="values__op" aria-hidden="true" data-op>+</span><span class="visually-hidden">más</span>
+        <span class="values__word" data-word="2">{w3}</span>
+        <span class="values__op values__op--eq" aria-hidden="true" data-op>=</span><span class="visually-hidden">igual a</span>
+        <span class="values__result" data-result><Brush>{content.values.result}</Brush></span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .values {
+    position: relative;
+    color: var(--claro);
+    /* Del marino de Historia al azul del escudo y la camiseta: el color cambia al bajar */
+    background: linear-gradient(
+      to bottom,
+      var(--marino) 0%,
+      var(--azul-escudo) 20%,
+      color-mix(in oklch, var(--azul-escudo), var(--azul-camiseta) 60%) 55%,
+      var(--azul-escudo) 85%,
+      color-mix(in oklch, var(--azul-escudo), var(--marino) 45%) 100%
+    );
+  }
+  :global(.js) .values[data-mode='scrub'] { height: 300svh; }
+  .values__stage {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: clip;
+    padding: clamp(4.5rem, 10svh, 7rem) 0 clamp(5.5rem, 12svh, 8rem);
+  }
+  :global(.js) .values[data-mode='scrub'] .values__stage { position: sticky; top: 0; height: 100svh; min-height: 0; }
+
+  .values__floor {
+    position: absolute;
+    inset: 0;
+    perspective: 800px;
+    perspective-origin: 50% 10%;
+    color: var(--crema);
+    pointer-events: none;
+  }
+  .values__floor :global(.values__court) {
+    position: absolute;
+    width: 170vw;
+    left: 50%;
+    top: 30%;
+    translate: -50% 0;
+    transform: rotateX(58deg);
+    transform-origin: 50% 0;
+    opacity: 0.22;
+    stroke-width: 1.3;
+    --draw: 1;
+  }
+  :global(.js) .values[data-mode='scrub'] .values__floor :global(.values__court) { --draw: 0; }
+  @media (min-width: 1024px) { .values__floor :global(.values__court) { stroke-width: 0.5; } }
+
+  /* Bloque centrado, con margen, que cabe entero en la pantalla */
+  .values__inner {
+    position: relative;
+    width: min(100% - 2 * var(--gutter), 900px);
+    margin-inline: auto;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+  .values__title {
+    font-family: var(--font-text);
+    font-weight: 650;
+    font-size: var(--step-1);
+    letter-spacing: 0;
+    color: var(--claro-2);
+    margin-bottom: clamp(1rem, 3svh, 2rem);
+  }
+  .values__eq {
+    max-width: none;
+    display: grid;
+    justify-items: center;
+    row-gap: clamp(0.15rem, 0.8svh, 0.5rem);
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--claro);
+  }
+  .values__word {
+    --wdth: 100;
+    display: block;
+    width: max-content;
+    white-space: nowrap;
+    font-size: min(clamp(2.3rem, 10.5vw, 5.2rem), 9svh);
+    font-stretch: calc(var(--wdth) * 1%);
+    letter-spacing: -0.01em;
+    transform-origin: 50% 60%;
+    contain: layout style;
+  }
+  .values__op {
+    font-size: min(clamp(2.4rem, 8vw, 4.4rem), 7svh);
+    font-weight: 900;
+    font-stretch: 150%;
+    line-height: 0.72;
+    color: var(--cian);
+  }
+  .values__result {
+    margin-top: 0.15em;
+    font-size: min(clamp(1.6rem, 6.4vw, 3.1rem), 6svh);
+    font-stretch: 112%;
+    color: var(--oro);
+    line-height: 1;
+    white-space: normal;
+    max-width: 14ch;
+  }
+
+  @media (min-width: 1024px) {
+    .values__stage { padding-top: calc(73px + clamp(1.5rem, 5svh, 3rem)); padding-bottom: clamp(2rem, 6svh, 4rem); }
+    .values__result { max-width: none; }
+  }
+</style>

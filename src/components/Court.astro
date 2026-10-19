@@ -1,0 +1,31 @@
+---
+// Pista de fútbol sala a escala real (40 x 20 m; 1 unidad = 10 cm).
+// Cada trazo usa pathLength=1: se dibuja con la variable CSS --draw (0 -> 1).
+interface Props { class?: string; }
+const { class: cls } = Astro.props;
+---
+
+<svg class:list={['court', cls]} viewBox="-14 -6 428 212" aria-hidden="true" focusable="false">
+  <rect pathLength="1" x="0" y="0" width="400" height="200"></rect>
+  <line pathLength="1" x1="200" y1="0" x2="200" y2="200"></line>
+  <circle pathLength="1" cx="200" cy="100" r="30"></circle>
+  <circle class="dot" cx="200" cy="100" r="1.8"></circle>
+  <!-- Áreas de penalti: cuartos de círculo de 6 m desde cada poste -->
+  <path pathLength="1" d="M0 25 A60 60 0 0 1 60 85 L60 115 A60 60 0 0 1 0 175"></path>
+  <path pathLength="1" d="M400 25 A60 60 0 0 0 340 85 L340 115 A60 60 0 0 0 400 175"></path>
+  <!-- Puntos de penalti (6 m) y doble penalti (10 m) -->
+  <circle class="dot" cx="60" cy="100" r="1.5"></circle>
+  <circle class="dot" cx="100" cy="100" r="1.5"></circle>
+  <circle class="dot" cx="340" cy="100" r="1.5"></circle>
+  <circle class="dot" cx="300" cy="100" r="1.5"></circle>
+  <!-- Porterías (3 m) -->
+  <path pathLength="1" d="M0 85 H-10 V115 H0"></path>
+  <path pathLength="1" d="M400 85 H410 V115 H400"></path>
+  <!-- Arcos de esquina (25 cm) -->
+  <path pathLength="1" d="M2.5 0 A2.5 2.5 0 0 1 0 2.5"></path>
+  <path pathLength="1" d="M397.5 0 A2.5 2.5 0 0 0 400 2.5"></path>
+  <path pathLength="1" d="M0 197.5 A2.5 2.5 0 0 1 2.5 200"></path>
+  <path pathLength="1" d="M400 197.5 A2.5 2.5 0 0 0 397.5 200"></path>
+  <!-- Zonas de sustitución -->
+  <path pathLength="1" d="M100 196 V204 M150 196 V204 M250 196 V204 M300 196 V204"></path>
+</svg>

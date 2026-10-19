@@ -1,0 +1,94 @@
+---
+// Familia: la ilustración del equipo a sangre sobre crema (multiply: el blanco desaparece
+// sin recorte). Entrada: cortina de franjas del escudo que se abre + zoom lento.
+import { content } from '../content';
+import Picture from './Picture.astro';
+import Brush from './Brush.astro';
+---
+
+<section class="family" id="familia" aria-labelledby="family-title" data-family>
+  <figure class="family__figure">
+    <div class="family__media" data-family-media>
+      <Picture
+        name="equipo"
+        alt={content.family.imageAlt}
+        sizes="(min-width: 1024px) min(1400px, calc((100vh - 19.5rem) * 1.25)), calc(100vw - 2rem)"
+        class="family__pic"
+        imgClass="family__img"
+      />
+      <div class="family__curtain" aria-hidden="true" data-curtain>
+        {Array.from({ length: 7 }, (_, i) => <span style={`--i:${i}`} />)}
+      </div>
+    </div>
+    <figcaption class="family__caption">
+      <h2 class="family__title" id="family-title"><Brush class="family__brush">{content.family.title}</Brush></h2>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  /* Campo de franjas del escudo (rojo / rojo oscuro) separado del azul por la línea
+     negra del escudo, como entre la banda y las franjas. */
+  .family {
+    position: relative;
+    padding: clamp(2.5rem, 6svh, 4.5rem) 0 clamp(2.5rem, 6svh, 4.5rem);
+    border-top: clamp(8px, 1vw, 12px) solid #0f1511;
+    background: linear-gradient(
+      90deg,
+      var(--rojo) 0 14.2857%, var(--rojo-osc) 0 28.5714%, var(--rojo) 0 42.8571%,
+      var(--rojo-osc) 0 57.1429%, var(--rojo) 0 71.4286%, var(--rojo-osc) 0 85.7143%, var(--rojo) 0
+    );
+  }
+  /* Lámina: la ilustración vive sobre su propio papel (multiply intacto) */
+  /* La lámina se dimensiona por el alto disponible: la ilustración entera cabe en
+     pantalla sin hacer scroll (proporción 1402 x 1122 = 1,25). */
+  .family__figure {
+    --img-h: calc(100svh - 19.5rem);
+    width: min(100% - 1.25rem, 1400px, calc(var(--img-h) * 1.2496 + 3rem));
+    margin-inline: auto;
+    padding: clamp(0.5rem, 1.6vw, 1.5rem) clamp(0.5rem, 1.6vw, 1.5rem) clamp(1.4rem, 3vw, 2.4rem);
+    background: var(--crema);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 0 rgb(0 0 0 / 0.08), 0 40px 70px -30px rgb(0 0 0 / 0.55);
+  }
+  .family__media {
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--crema); /* base del multiply dentro del grupo aislado */
+  }
+  .family :global(.family__pic) { display: block; }
+  .family :global(.family__img) {
+    width: 100%;
+    mix-blend-mode: multiply;
+    /* El "blanco" del archivo es #FAFAFA: +2,5 % de brillo lo lleva a blanco puro y
+       el multiply lo funde del todo con el crema (sin recortes ni retoque de caras). */
+    filter: brightness(1.025);
+    transform-origin: 50% 60%;
+  }
+  .family__curtain {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    pointer-events: none;
+    visibility: hidden;
+  }
+  :global(.js) .family[data-mode='curtain'] .family__curtain { visibility: visible; }
+  .family__curtain span { background: var(--rojo); }
+  .family__curtain span:nth-child(even) { background: var(--crema); }
+
+  .family__caption {
+    width: min(100% - 2 * var(--gutter), 1100px);
+    margin: clamp(0.6rem, 2.5svh, 1.5rem) auto 0;
+    text-align: center;
+  }
+  .family__title {
+    display: inline-block;
+    font-size: min(var(--step-2), 4.5svh);
+    font-weight: 850;
+    font-stretch: 94%;
+    line-height: 1.02;
+    color: var(--marino);
+  }
+</style>

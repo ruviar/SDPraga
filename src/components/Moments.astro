@@ -1,0 +1,55 @@
+---
+// Momentos (opcional, siteConfig.showMoments): portada de recuerdo enmarcada.
+// Se presenta como objeto físico y SIEMPRE con la etiqueta "Portada de recuerdo";
+// nunca como prensa real ni como cita de un medio.
+import { content } from '../content';
+import Picture from './Picture.astro';
+---
+
+<section class="moments" id="momentos" aria-labelledby="moments-title" data-moments>
+  <div class="moments__inner">
+    <h2 class="moments__title" id="moments-title">{content.moments.title}</h2>
+    <figure class="moments__frame" data-moments-frame>
+      <Picture name="portada" alt={content.moments.imageAlt} sizes="(min-width: 1024px) 34vw, 82vw" imgClass="moments__img" />
+      <figcaption class="moments__label">{content.moments.label}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .moments { padding: clamp(4rem, 10vh, 7rem) 0; overflow: clip; background: var(--marino); color: var(--claro); }
+  .moments__inner {
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin-inline: auto;
+    display: grid;
+    gap: 2.5rem;
+    justify-items: center;
+  }
+  .moments__title { justify-self: start; font-size: var(--step-3); font-stretch: 120%; color: var(--claro); }
+  .moments__frame {
+    position: relative;
+    width: min(82vw, 30rem);
+    padding: 12px;
+    background: white;
+    border-radius: var(--radius-paper);
+    box-shadow: 0 2px 3px color-mix(in oklch, var(--marino), transparent 80%), 0 40px 60px -30px color-mix(in oklch, var(--marino), transparent 35%);
+    transform: rotate(-5deg);
+  }
+  .moments :global(.moments__img) { width: 100%; }
+  .moments__label {
+    position: absolute;
+    right: -0.8rem;
+    bottom: 1.6rem;
+    padding: 0.5rem 0.85rem;
+    background: var(--oro);
+    color: var(--marino);
+    font-weight: 700;
+    font-size: var(--step--1);
+    border-radius: 4px;
+    rotate: 3deg;
+    box-shadow: 0 8px 16px -8px color-mix(in oklch, var(--marino), transparent 40%);
+  }
+  @media (min-width: 1024px) {
+    .moments__frame { width: min(34vw, 62svh); }
+  }
+</style>
