@@ -22,7 +22,7 @@ const hex = (c) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0'
 /* ------------------------------------------------------------------ */
 /* Derivados responsive                                                */
 /* ------------------------------------------------------------------ */
-async function derive(name, input, { widths, formats = ['avif', 'webp', 'jpg'], alpha = false }) {
+async function derive(name, input, { widths, formats = ['avif', 'webp', 'jpg'], alpha = false, avifQ, webpQ }) {
   const img = sharp(input);
   const meta = await img.metadata();
   const usable = widths.filter((w) => w <= meta.width);
@@ -31,8 +31,8 @@ async function derive(name, input, { widths, formats = ['avif', 'webp', 'jpg'], 
   for (const w of usable) {
     for (const f of formats) {
       let p = sharp(input).resize({ width: w, kernel: 'lanczos3' });
-      if (f === 'avif') p = p.avif({ quality: alpha ? 70 : 55, effort: 6 });
-      if (f === 'webp') p = p.webp({ quality: alpha ? 90 : 78, effort: 6, alphaQuality: 100 });
+      if (f === 'avif') p = p.avif({ quality: avifQ ?? (alpha ? 70 : 55), effort: 6 });
+      if (f === 'webp') p = p.webp({ quality: webpQ ?? (alpha ? 90 : 78), effort: 6, alphaQuality: 100 });
       if (f === 'jpg') p = p.flatten({ background: '#FDFAF5' }).jpeg({ quality: 80, mozjpeg: true, progressive: true });
       if (f === 'png') p = p.png({ compressionLevel: 9, palette: false });
       await p.toFile(`${PUB}/${name}-${w}.${f}`);
@@ -402,6 +402,73 @@ async function equipo() {
   // baja, para no duplicar el nombre). Va difuminado, así que basta con anchos pequeños.
   const people = await sharp(`${SRC}/equipo.jpeg`).extract({ left: 0, top: 0, width: 1402, height: 790 }).png().toBuffer();
   await derive('hero-equipo', people, { widths: [640, 960, 1280] });
+  await teamCutout(people);
+}
+
+// Hero móvil «cartel»: las mismas personas sin el fondo blanco (alfa), para que se vean
+// los 17 sobre el azul del club con sus colores reales. Solo se quita el blanco de fondo
+// (relleno desde los bordes + huecos blancos grandes y planos); las caras no se tocan.
+async function teamCutout(input) {
+  const { data, info } = await sharp(input).raw().toBuffer({ resolveWithObject: true });
+  const W = info.width, H = info.height, C = info.channels, N = W * H;
+  const minc = new Uint8Array(N), isWhite = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    const r = data[i * C], g = data[i * C + 1], b = data[i * C + 2];
+    const mn = Math.min(r, g, b), mx = Math.max(r, g, b);
+    minc[i] = mn;
+    isWhite[i] = mn >= 228 && mx - mn <= 20 ? 1 : 0;
+  }
+  // Regiones blancas conectadas (4-vecindad): fondo si tocan el borde o si son grandes
+  const label = new Int32Array(N).fill(-1);
+  const bg = new Uint8Array(N);
+  const stack = [];
+  for (let s = 0; s < N; s++) {
+    if (!isWhite[s] || label[s] !== -1) continue;
+    const region = [];
+    let edge = false;
+    stack.push(s);
+    label[s] = s;
+    while (stack.length) {
+      const i = stack.pop();
+      region.push(i);
+      const x = i % W, y = (i / W) | 0;
+      if (x === 0 || y === 0 || x === W - 1 || y === H - 1) edge = true;
+      for (const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, y > 0 ? i - W : -1, y < H - 1 ? i + W : -1]) {
+        if (j >= 0 && isWhite[j] && label[j] === -1) { label[j] = s; stack.push(j); }
+      }
+    }
+    if (edge || region.length > 1800) for (const i of region) bg[i] = 1;
+  }
+  // Alfa: 0 en el fondo; en el borde (2 px) según lo blanco que sea, sin halo blanco
+  const near = (i) => {
+    const x = i % W, y = (i / W) | 0;
+    for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+      const xx = x + dx, yy = y + dy;
+      if (xx >= 0 && yy >= 0 && xx < W && yy < H && bg[yy * W + xx]) return true;
+    }
+    return false;
+  };
+  const out = Buffer.alloc(N * 4);
+  for (let i = 0; i < N; i++) {
+    let a = 255;
+    if (bg[i]) a = 0;
+    else if (near(i)) a = Math.round(255 * Math.min(1, Math.max(0, (255 - minc[i]) / 70)));
+    const k = a / 255;
+    for (let c = 0; c < 3; c++) {
+      const v = data[i * C + c];
+      // Quita la mezcla con el blanco en los píxeles semitransparentes del borde
+      out[i * 4 + c] = k > 0 && k < 1 ? Math.max(0, Math.min(255, Math.round((v - 255 * (1 - k)) / k))) : v;
+    }
+    out[i * 4 + 3] = a;
+  }
+  const png = await sharp(out, { raw: { width: W, height: H, channels: 4 } }).png().toBuffer();
+  // Control visual: recorte sobre el azul del club
+  await sharp({ create: { width: W, height: H, channels: 4, background: '#074D88' } })
+    .composite([{ input: png }])
+    .png()
+    .toFile(`${QA}/equipo-recorte-sobre-azul.png`);
+  // Ilustración de trazo grueso: aguanta bien una calidad más baja (es la imagen principal del hero móvil)
+  await derive('hero-equipo-recorte', png, { widths: [480, 750, 1024, 1280], formats: ['avif', 'webp', 'png'], alpha: true, avifQ: 50, webpQ: 74 });
 }
 
 /* ------------------------------------------------------------------ */

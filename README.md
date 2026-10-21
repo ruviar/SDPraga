@@ -23,7 +23,7 @@ node scripts/contrast.mjs              # contraste WCAG de todos los pares de co
 
 ## Cambiar contenido (sin tocar componentes)
 
-- `src/site.config.ts`: contacto (`phone`, `email`, `whatsapp`), `social.instagram`, dominio (`url`), nombres de los hermanos Mazo (`founders`), enlaces de colaboradores, interruptores `showFoundersPhoto` y `showMoments`.
+- `src/site.config.ts`: contacto (`phone`, `email`, `whatsapp`), `social.instagram`, dominio (`url`), nombres de los hermanos Mazo (`founders`), enlaces de colaboradores, interruptores `showFoundersPhoto` y `showMoments`, y `heroMobile` (`'franjas'` o `'cartel'`).
   - Contacto vacío → «Próximamente». Al rellenarlo aparecen los botones Llamar / Escribir / WhatsApp / Instagram y el JSON-LD se actualiza solo.
 - `src/content.ts`: todos los textos, con su fuente comentada. Ver `CONTENT-AUDIT.md`.
 - Imágenes originales en `src/assets/source/` (solo lectura). Tras cambiar alguna: `npm run assets`.
@@ -49,7 +49,7 @@ public/img/                  AVIF + WebP + JPG/PNG en varios anchos
 
 ## Resultados de verificación (19-10-2026)
 
-- Lighthouse móvil (simulado, 3 pasadas, servidor con compresión): Rendimiento 100 · Accesibilidad 100 · Buenas prácticas 100 · SEO 100 · LCP 1,7 s · CLS 0 · TBT 0 ms. Informes en `.claude/qa/lighthouse/` (`summary.json` + HTML).
+- Lighthouse móvil (simulado, 3 pasadas, servidor con compresión): Rendimiento 100 · Accesibilidad 100 · Buenas prácticas 100 · SEO 100 · LCP 1,5–1,7 s · CLS 0 · TBT 0 ms. Informes en `.claude/qa/lighthouse/` (`summary.json` + HTML).
 - Capturas a 375, 768 y 1440 px, con y sin reduced-motion: `.claude/qa/shots/`. Consola sin errores, sin 404, sin scroll horizontal accidental.
 - Escudo vectorial frente al original: 0 % de diferencia en el interior de las formas (`.claude/qa/escudo-diff.png`).
 - JS: 1 KB en la carga; el paquete de movimiento (57 KB gzip) se pide con la primera interacción.
@@ -57,7 +57,7 @@ public/img/                  AVIF + WebP + JPG/PNG en varios anchos
 ## Decisiones de diseño (una línea cada una)
 
 - **La página se lee como el escudo**: banda azul (hero), línea negra, franjas rojas (Familia), marino de las sudaderas (Historia, Contacto). Fondos solo en colores del equipo, a petición del cliente.
-- **Hero**: el nombre encima de un fondo difuminado y oscurecido. Escritorio: la ilustración del equipo (empieza bajo la barra) y el escudo suelto a la derecha. Móvil y tableta: el escudo grande como fondo (la foto ni se descarga).
+- **Hero**: escritorio: la ilustración del equipo difuminada de fondo (empieza bajo la barra) y el escudo suelto a la derecha. Móvil y tableta: las franjas rojas y blancas del escudo en vertical, fundiéndose en marino hacia el texto (la foto ni se descarga). Alternativa guardada: `heroMobile: 'cartel'` en `site.config.ts` (equipo entero recortado arriba, nombre debajo).
 - **Cabecera de club a todo el ancho** en todos los tamaños, con el escudo sobresaliendo por encima de las 7 franjas; inspirada en webs de clubes profesionales, sin copiar ninguna. En móvil y tableta, botón de menú que abre un panel a pantalla completa.
 - **Solo movimiento vertical**: Historia son cuatro bandas de color (marino, azul, amarillo pabellón, rojo) que alternan texto a la izquierda y a la derecha; en escritorio, en Valores las palabras aparecen una a una al bajar, bajo el título grande (en móvil se muestra montado).
 - **Todo cabe en pantalla con margen**: Valores centrado y limitado por el alto de la ventana; la ilustración de Familia se dimensiona para verse entera sin scroll.

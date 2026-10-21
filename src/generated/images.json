@@ -116,5 +116,21 @@
       "jpg"
     ],
     "alpha": false
+  },
+  "hero-equipo-recorte": {
+    "width": 1402,
+    "height": 790,
+    "widths": [
+      480,
+      750,
+      1024,
+      1280
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": true
   }
 }

@@ -30,6 +30,11 @@ export const siteConfig = {
     coach: '', // nombre de pila del entrenador, cuando se confirme
   },
 
+  /** Hero en móvil y tableta (en escritorio no cambia):
+   *  'cartel'  = el equipo entero arriba (sin fondo blanco) y el nombre debajo.
+   *  'franjas' = las franjas del escudo oscurecidas de fondo, con el nombre encima. */
+  heroMobile: 'franjas' as 'cartel' | 'franjas',
+
   /** img2 en el capítulo "Los hermanos Mazo" (el cliente confirma que son ellos). */
   showFoundersPhoto: true,
 

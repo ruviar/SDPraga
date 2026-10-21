@@ -45,6 +45,8 @@ export const content = {
   hero: {
     ctaPrimary: { href: '#historia', label: 'Conoce nuestra historia' }, // [nav]
     ctaSecondary: { href: '#contacto', label: 'Contacto' }, // [nav]
+    teamAlt:
+      'Ilustración del equipo de S.D. Praga: adultos con sudaderas azul marino y niños con la equipación azul y roja.', // [img:equipo]
   },
 
   story: {
