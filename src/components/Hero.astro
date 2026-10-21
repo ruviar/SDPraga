@@ -7,11 +7,14 @@ import Picture from './Picture.astro';
 ---
 
 <section class="hero mesh" id="inicio" aria-labelledby="hero-title" data-hero>
-  <!-- Fondo: la ilustración del equipo, difuminada y oscurecida, con el nombre encima.
-       Decorativa (alt vacío): la misma ilustración tiene su texto alternativo en Familia.
+  <!-- Fondo con el nombre encima, decorativo (alt vacío):
+       · móvil y tableta: el escudo grande y oscurecido;
+       · escritorio: la ilustración del equipo difuminada (su alt está en Familia).
+       La foto es `lazy`: oculta en móvil, el navegador no la descarga.
        `sizes` pide un ancho menor del que ocupa porque va difuminada. -->
   <div class="hero__bg" aria-hidden="true">
-    <Picture name="hero-equipo" alt="" sizes="60vw" loading="eager" fetchpriority="low" imgClass="hero__photo" />
+    <img class="hero__shield" src="/escudo.svg" width="434" height="549" alt="" decoding="async" draggable="false" />
+    <Picture name="hero-equipo" alt="" sizes="60vw" loading="lazy" fetchpriority="low" imgClass="hero__photo" />
   </div>
 
   <div class="hero__crest">
@@ -54,7 +57,7 @@ import Picture from './Picture.astro';
   }
 
 
-  /* ---------- Fondo: ilustración del equipo difuminada bajo un velo ---------- */
+  /* ---------- Fondo bajo un velo marino ---------- */
   .hero__bg {
     position: absolute;
     inset: 65px 0 0;
@@ -62,7 +65,19 @@ import Picture from './Picture.astro';
     overflow: clip;
     pointer-events: none;
   }
-  .hero__bg :global(picture) { position: absolute; inset: 0; }
+  /* Móvil y tableta: escudo grande, centrado detrás del nombre, apagado y difuminado */
+  .hero__shield {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    translate: -50% -50%;
+    width: min(118vw, 84svh * 0.79, 44rem);
+    height: auto;
+    /* Un poco difuminado: queda de fondo y el nombre manda */
+    filter: blur(4px) brightness(0.62) saturate(0.85) drop-shadow(0 40px 60px rgb(0 0 0 / 0.5));
+    user-select: none;
+  }
+  .hero__bg :global(picture) { display: none; position: absolute; inset: 0; }
   /* multiply: el blanco de la ilustración toma el azul del hero; blur + brillo la apagan */
   .hero__bg :global(.hero__photo) {
     width: 100%;
@@ -76,19 +91,21 @@ import Picture from './Picture.astro';
     transform-origin: 50% 0%;
     user-select: none;
   }
-  /* Velo marino: más claro arriba (se ve el equipo), oscuro donde va el texto */
+  /* Velo marino: deja ver el escudo arriba y oscurece hacia el texto */
   .hero__bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgb(8 18 43 / 0.38) 0%,
-      rgb(8 18 43 / 0.45) 32%,
-      rgb(8 18 43 / 0.74) 56%,
-      rgb(8 18 43 / 0.9) 78%,
-      var(--marino) 100%
-    );
+    background:
+      radial-gradient(90% 60% at 50% 38%, rgb(8 18 43 / 0.15) 0%, rgb(8 18 43 / 0.55) 75%),
+      linear-gradient(
+        to bottom,
+        rgb(8 18 43 / 0.35) 0%,
+        rgb(8 18 43 / 0.45) 40%,
+        rgb(8 18 43 / 0.72) 62%,
+        rgb(8 18 43 / 0.9) 82%,
+        var(--marino) 100%
+      );
   }
   .hero__crest { display: none; }
 
@@ -168,6 +185,9 @@ import Picture from './Picture.astro';
     }
     .hero__copy { grid-area: 1 / 1; align-self: end; }
     .hero__bg { inset: 73px 0 0; }
+    /* Escritorio: la ilustración del equipo en lugar del escudo */
+    .hero__shield { display: none; }
+    .hero__bg :global(picture) { display: block; }
     .hero__bg :global(.hero__photo) { object-position: 50% 0%; filter: blur(7px) brightness(0.8) saturate(1.05); }
     /* Escritorio: el texto va abajo a la izquierda, el velo se oscurece hacia ahí */
     .hero__bg::after {
