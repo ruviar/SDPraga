@@ -8,8 +8,8 @@ export const siteConfig = {
   url: '',
 
   contact: {
-    /** Teléfono en formato internacional, p. ej. '+34600000000'. PENDIENTE. */
-    phone: '',
+    /** Teléfono en formato internacional, p. ej. '+34600000000'. Móvil de José Luis (cliente, 22-11-2026). */
+    phone: '+34687768410',
     /** Correo, p. ej. 'hola@sdpraga.es'. PENDIENTE. */
     email: '',
     /** Número para WhatsApp (solo dígitos con prefijo, p. ej. '34600000000'). Vacío = se usa `phone`. */
