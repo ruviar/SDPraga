@@ -12,6 +12,10 @@ const ig = siteConfig.social.instagram;
 const wa = (whatsapp || phone).replace(/\D/g, '');
 const hasAny = Boolean(phone || email || wa || ig);
 const c = content.contact;
+// Número visible con prefijo y grupos 3-2-2-2 (+34 687 76 84 10).
+const shown = phone
+  ? phone.replace(/\D/g, '').replace(/^(34)(\d{3})(\d{2})(\d{2})(\d{2})$/, '+$1 $2 $3 $4 $5')
+  : '';
 ---
 
 <section class="contact mesh" id="contacto" aria-labelledby="contact-title" data-contact>
@@ -26,6 +30,12 @@ const c = content.contact;
     <h2 class="contact__title" id="contact-title">{c.title}</h2>
     {
       hasAny ? (
+        <>
+        {shown && (
+          <a class="contact__phone" href={`tel:${phone.replace(/\s/g, '')}`} aria-label={`${c.call}: ${shown}`}>
+            {shown}
+          </a>
+        )}
         <div class="contact__actions">
           {phone && (
             <Button href={`tel:${phone.replace(/\s/g, '')}`} variant="crema">
@@ -52,6 +62,7 @@ const c = content.contact;
             </Button>
           )}
         </div>
+        </>
       ) : (
         <p class="contact__soon">{c.soon}</p>
       )
@@ -129,6 +140,20 @@ const c = content.contact;
     line-height: 1.2;
     color: var(--crema);
   }
+  .contact__phone {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-stretch: 100%;
+    font-size: var(--step-1);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    /* Secundario: crema atenuado hacia el marino */
+    color: color-mix(in oklch, var(--crema) 62%, var(--marino));
+    text-decoration: none;
+    margin-top: calc(-1 * clamp(0.6rem, 2vh, 1.2rem));
+  }
+  .contact__phone:hover { color: var(--crema); }
   .contact__actions {
     display: flex;
     flex-wrap: wrap;
