@@ -28,7 +28,7 @@ import { siteConfig } from '../site.config';
     <Hero />
     <Story />
     <Values />
-    <Family />
+    {siteConfig.showTeamPhoto && <Family />}
     {siteConfig.showMoments && <Moments />}
     <Sponsors />
     <Contact />

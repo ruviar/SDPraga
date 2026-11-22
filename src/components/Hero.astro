@@ -7,8 +7,10 @@ import Picture from './Picture.astro';
 import images from '../generated/images.json';
 import { siteConfig } from '../site.config';
 
-// Móvil y tableta: variante elegida en site.config.ts (en escritorio no cambia).
-const mobile = siteConfig.heroMobile;
+// Móvil y tableta: variante elegida en site.config.ts. Sin la ilustración del equipo
+// (showTeamPhoto: false) se usan siempre las franjas del escudo, también en escritorio.
+const photo = siteConfig.showTeamPhoto;
+const mobile = photo ? siteConfig.heroMobile : 'franjas';
 // Equipo recortado (sin fondo blanco) para el «cartel». En escritorio el primer <source>
 // entrega un GIF de 1 px: el navegador no descarga la ilustración que no va a mostrar.
 const team = images['hero-equipo-recorte'];
@@ -16,13 +18,13 @@ const teamSet = (f: string) => team.widths.map((w) => `/img/hero-equipo-recorte-
 const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 ---
 
-<section class="hero mesh" id="inicio" aria-labelledby="hero-title" data-hero data-mobile={mobile}>
+<section class="hero mesh" id="inicio" aria-labelledby="hero-title" data-hero data-mobile={mobile} data-photo={photo ? 'on' : 'off'}>
   <!-- Fondo, decorativo (alt vacío):
        · escritorio: la ilustración del equipo difuminada (`lazy`: en móvil no se descarga);
        · móvil 'franjas': las franjas del escudo oscurecidas. -->
   <div class="hero__bg" aria-hidden="true">
     {mobile === 'franjas' && <div class="hero__stripes">{Array.from({ length: 7 }, () => <span />)}</div>}
-    <Picture name="hero-equipo" alt="" sizes="60vw" loading="lazy" fetchpriority="low" imgClass="hero__photo" />
+    {photo && <Picture name="hero-equipo" alt="" sizes="60vw" loading="lazy" fetchpriority="low" imgClass="hero__photo" />}
   </div>
 
   {
@@ -243,7 +245,8 @@ const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
     .hero[data-mobile] { grid-template-rows: 1fr; align-content: normal; padding-top: 7.5rem; }
     .hero__bg { inset: 73px 0 0; }
     /* Escritorio: la ilustración del equipo difuminada de fondo, en todas las variantes */
-    .hero__team, .hero__stripes { display: none; }
+    .hero__team { display: none; }
+    .hero[data-photo='on'] .hero__stripes { display: none; }
     .hero__bg :global(picture) { display: block; }
     .hero__bg :global(.hero__photo) { object-position: 50% 0%; filter: blur(7px) brightness(0.8) saturate(1.05); }
     /* Escritorio: el texto va abajo a la izquierda, el velo se oscurece hacia ahí
@@ -252,6 +255,12 @@ const blank = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAA
       background:
         linear-gradient(to right, rgb(8 18 43 / 0.62) 0%, rgb(8 18 43 / 0.3) 55%, rgb(8 18 43 / 0.2) 100%),
         linear-gradient(to bottom, rgb(8 18 43 / 0.15) 0%, rgb(8 18 43 / 0.25) 45%, rgb(8 18 43 / 0.75) 82%, var(--marino) 100%);
+    }
+    /* Sin ilustración: las franjas del escudo a todo el ancho, con velo más fuerte tras el texto */
+    .hero[data-photo='off'] .hero__bg::after {
+      background:
+        linear-gradient(to right, rgb(8 18 43 / 0.86) 0%, rgb(8 18 43 / 0.55) 55%, rgb(8 18 43 / 0.4) 100%),
+        linear-gradient(to bottom, rgb(8 18 43 / 0.25) 0%, rgb(8 18 43 / 0.45) 45%, rgb(8 18 43 / 0.85) 82%, var(--marino) 100%);
     }
     .hero__crest {
       display: block;

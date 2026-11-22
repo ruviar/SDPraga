@@ -4,6 +4,10 @@
 // Escritorio: enlaces en la barra. Móvil/tableta: botón de menú que abre un panel a
 // pantalla completa bajo la barra (lógica en src/scripts/boot.ts, funciona sin esperar a GSAP).
 import { content } from '../content';
+import { siteConfig } from '../site.config';
+
+// Sin la ilustración del equipo no hay sección «Familia»: tampoco su enlace.
+const links = content.nav.filter((l) => siteConfig.showTeamPhoto || l.href !== '#familia');
 ---
 
 <header class="nav" data-nav>
@@ -13,7 +17,7 @@ import { content } from '../content';
       <span class="nav__name">{content.name}</span>
     </a>
     <ul class="nav__links">
-      {content.nav.map((l) => (
+      {links.map((l) => (
         <li><a href={l.href} data-nav-link>{l.label}</a></li>
       ))}
     </ul>
@@ -27,7 +31,7 @@ import { content } from '../content';
   <div class="sheet" id="nav-sheet" data-sheet hidden>
     <nav class="sheet__nav" aria-label="Secciones">
       <ul class="sheet__list">
-        {content.nav.map((l, i) => (
+        {links.map((l, i) => (
           <li style={`--i:${i}`}>
             <a class="sheet__link" href={l.href} data-nav-link>{l.label}</a>
           </li>

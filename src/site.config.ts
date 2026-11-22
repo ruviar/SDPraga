@@ -35,6 +35,10 @@ export const siteConfig = {
    *  'franjas' = las franjas del escudo oscurecidas de fondo, con el nombre encima. */
   heroMobile: 'franjas' as 'cartel' | 'franjas',
 
+  /** Ilustración del equipo (equipo.jpeg, hecha con IA): fondo del hero en escritorio y sección «Familia».
+   *  false = oculta provisionalmente (hero con las franjas del escudo, sin sección ni enlace «Familia»). */
+  showTeamPhoto: false,
+
   /** img2 en el capítulo "Los hermanos Mazo" (el cliente confirma que son ellos). */
   showFoundersPhoto: true,
 
