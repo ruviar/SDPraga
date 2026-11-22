@@ -360,8 +360,8 @@ async function logos() {
     }
     return { left: x0, top: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 };
   };
-  for (const n of ['dupla', 'aguero']) {
-    const t = await sharp(`${SRC}/${n}.jpeg`).extract(await inkBox(`${SRC}/${n}.jpeg`)).png().toBuffer();
+  for (const [n, ext] of [['dupla', 'jpeg'], ['aguero', 'jpeg'], ['softee', 'png']]) {
+    const t = await sharp(`${SRC}/${n}.${ext}`).extract(await inkBox(`${SRC}/${n}.${ext}`)).png().toBuffer();
     const m = await sharp(t).metadata();
     const padded = await sharp(t)
       .extend({ top: Math.round(m.height * 0.04), bottom: Math.round(m.height * 0.04), left: Math.round(m.width * 0.04), right: Math.round(m.width * 0.04), background: '#ffffff' })

@@ -1,6 +1,6 @@
 # S.D. Praga · web del club
 
-Landing de una sola página para S.D. Praga, club de fútbol para niños. Astro 5 + TypeScript, HTML estático, sin cookies ni analítica ni formularios.
+Landing de una sola página para S.D. Praga, club de fútbol sala para niños. Astro 5 + TypeScript, HTML estático, sin cookies ni analítica ni formularios.
 
 ## Comandos
 

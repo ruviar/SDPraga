@@ -13,4 +13,4 @@
 - Herramientas de preparación: sharp (Apache-2.0), potrace (GPL-2.0, solo en el script de preparación; no se distribuye en la web), @capsizecss/unpack (MIT), playwright-core (Apache-2.0)
 
 ## Marcas de terceros
-Los logotipos de Aguero, Dupla Logistics y Travion IT Distribution pertenecen a sus titulares y se muestran como colaboradores del club, sin modificar sus colores. La portada de img1 (oculta por defecto) reproduce la cabecera de un diario real: no publicar sin permiso.
+Los logotipos de Aguero, Dupla Logistics, Travion IT Distribution y Softee by Jim Sports pertenecen a sus titulares y se muestran como colaboradores del club, sin modificar sus colores. La portada de img1 (oculta por defecto) reproduce la cabecera de un diario real: no publicar sin permiso.

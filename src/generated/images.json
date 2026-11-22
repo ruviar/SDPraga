@@ -72,6 +72,20 @@
     ],
     "alpha": false
   },
+  "logo-softee": {
+    "width": 2085,
+    "height": 867,
+    "widths": [
+      240,
+      480
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "png"
+    ],
+    "alpha": false
+  },
   "logo-travion": {
     "width": 1660,
     "height": 432,

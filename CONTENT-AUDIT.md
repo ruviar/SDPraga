@@ -11,7 +11,7 @@ Todo el texto vive en `src/content.ts` y `src/site.config.ts` (cada cadena lleva
 |---|---|---|
 | Global | Nombre «S.D. Praga» | chat + img:escudo (el escudo dice «S.D. PRAGA») |
 | Hero, Familia, pie, meta | Lema «Más que un equipo, una familia.» | img:equipo (impreso en la ilustración) |
-| Hero | «Club de fútbol para niños.» | chat |
+| Hero | «Club de fútbol sala para niños.» | chat |
 | Historia 01 | «El equipo nace de la inquietud de crear un club basado en valores: trabajo en equipo, sin individualidades.» | chat (cita casi literal) |
 | Historia 01 | «Aquí nadie juega solo.» | chat (paráfrasis de «no hay individualidades»; ver pregunta 9) |
 | Historia 02 | «S.D. Praga lo fundan los hermanos Mateo y José Luis Mazo: uno como entrenador, el otro como presidente.» | chat (frase literal del cliente, 19-10-2026; no asigna quién es quién) |
@@ -20,8 +20,9 @@ Todo el texto vive en `src/content.ts` y `src/site.config.ts` (cada cadena lleva
 | Historia 04 | «Somos un club recién nacido. Lo que venga lo escribimos juntos.» | chat («recién empezado») + brief |
 | Valores | ESFUERZO + CONFIANZA + DIVERSIÓN = SENTIMIENTO DE EQUIPO | chat |
 | Familia | Ilustración del equipo (equipo.jpeg), sin retoques | img:equipo |
-| Patrocinadores | Título «Patrocinadores» | cliente (sustituye al provisional «Los que nos ayudan a jugar») |
+| Patrocinadores | Título «COLABORAN:» | cliente (sustituye a «Patrocinadores»; el menú sigue diciendo «Patrocinadores») |
 | Patrocinadores | Logo de Aguero (alt «Aguero») | img:aguero (el logo dice AGUERO®; ver pregunta 5) |
+| Patrocinadores | Logo de Softee by Jim Sports (alt «Softee by Jim Sports») | pdf: SOFTEE BY JIM SPORTS.pdf |
 | Patrocinadores | Logo de Dupla Logistics (alt «Dupla Logistics») | img:dupla |
 | Patrocinadores | Logo de Travion IT Distribution (alt «Travion IT Distribution») | img:travion |
 | Contacto | «Próximamente» | cliente (estado honesto: no hay datos aún) |
@@ -47,9 +48,9 @@ Solo aparecen si se rellenan en `site.config.ts`: «Llamar», «Escribir», «Wh
 
 ## SEO / datos estructurados
 
-- `<title>` «S.D. Praga · Club de fútbol para niños» (brief/chat).
-- Meta description: nombre + «club de fútbol para niños fundado por los hermanos Mazo y basado en valores: esfuerzo, confianza y diversión» + lema (chat + img:equipo).
-- JSON-LD `SportsOrganization`: `name`, `sport: Fútbol`, `slogan` (lema), `logo`, `founder` = dos `Person`: Mateo Mazo y José Luis Mazo (chat), sin rol. **Sin** dirección, teléfono, email, fecha de fundación ni URL hasta que el cliente los dé (se añaden solos desde `site.config.ts`).
+- `<title>` «S.D. Praga · Club de fútbol sala para niños» (brief/chat).
+- Meta description: nombre + «club de fútbol sala para niños fundado por los hermanos Mazo y basado en valores: esfuerzo, confianza y diversión» + lema (chat + img:equipo).
+- JSON-LD `SportsOrganization`: `name`, `sport: Fútbol sala`, `slogan` (lema), `logo`, `founder` = dos `Person`: Mateo Mazo y José Luis Mazo (chat), sin rol. **Sin** dirección, teléfono, email, fecha de fundación ni URL hasta que el cliente los dé (se añaden solos desde `site.config.ts`).
 
 ## Retirado o no publicado (sin fuente o pendiente de permiso)
 

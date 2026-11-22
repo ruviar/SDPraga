@@ -26,12 +26,12 @@ export const content = {
   nameShort: 'S.D.', // [img:escudo]
   nameLong: 'PRAGA', // [img:escudo]
   motto: 'Más que un equipo, una familia.', // [img:equipo]
-  tagline: 'Club de fútbol para niños.', // [chat]
+  tagline: 'Club de fútbol sala para niños.', // [chat]
 
   meta: {
-    title: 'S.D. Praga · Club de fútbol para niños', // [chat]
+    title: 'S.D. Praga · Club de fútbol sala para niños', // [chat]
     description:
-      'S.D. Praga es un club de fútbol para niños fundado por los hermanos Mazo y basado en valores: esfuerzo, confianza y diversión. Más que un equipo, una familia.', // [chat] + [img:equipo]
+      'S.D. Praga es un club de fútbol sala para niños fundado por los hermanos Mazo y basado en valores: esfuerzo, confianza y diversión. Más que un equipo, una familia.', // [chat] + [img:equipo]
   },
 
   nav: [
@@ -106,11 +106,12 @@ export const content = {
   },
 
   sponsors: {
-    title: 'Patrocinadores', // [cliente] más serio que el provisional del brief
+    title: 'COLABORAN:', // [cliente] pide solo «COLABORAN:»
     list: [
       { id: 'aguero', name: 'Aguero', image: 'logo-aguero', blend: true }, // [img:aguero] (el logo dice AGUERO®)
       { id: 'dupla', name: 'Dupla Logistics', image: 'logo-dupla', blend: true }, // [img:dupla]
       { id: 'travion', name: 'Travion IT Distribution', image: 'logo-travion', blend: false }, // [img:travion]
+      { id: 'softee', name: 'Softee by Jim Sports', image: 'logo-softee', blend: true }, // [pdf:SOFTEE BY JIM SPORTS]
     ],
   },
 

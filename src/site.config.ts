@@ -46,6 +46,7 @@ export const siteConfig = {
     aguero: '',
     dupla: '',
     travion: '',
+    softee: '',
   },
 } as const;
 
