@@ -1,0 +1,8 @@
+{
+  // Cloudflare Workers (static assets). El nombre debe coincidir con el "Project name" del panel.
+  "name": "sd-praga",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
