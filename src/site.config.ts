@@ -37,7 +37,7 @@ export const siteConfig = {
 
   /** Ilustración del equipo (equipo.jpeg, hecha con IA): fondo del hero en escritorio y sección «Familia».
    *  false = oculta provisionalmente (hero con las franjas del escudo, sin sección ni enlace «Familia»). */
-  showTeamPhoto: false,
+  showTeamPhoto: true,
 
   /** img2 en el capítulo "Los hermanos Mazo" (el cliente confirma que son ellos). */
   showFoundersPhoto: true,
